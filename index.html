@@ -13,22 +13,20 @@
         :root {
             --bg-color: #e2e5b3; 
             --navy: #0a1d37;    
-            --overlay-yellow: rgba(226, 229, 179, 0.6); /* Filtre jaune */
+            --overlay-yellow: rgba(226, 229, 179, 0.6); 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            /* Image 100% largeur, centrée en hauteur avec filtre jaune */
             background-image: 
                 linear-gradient(var(--overlay-yellow), var(--overlay-yellow)),
                 url('IMG_5189.jpeg');
-            background-size: 100% auto; /* 100% largeur */
-            background-position: center center; /* Centré */
+            background-size: 100% auto;
+            background-position: center center;
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-color: var(--bg-color);
-            
             color: var(--navy);
             font-family: 'Sanchez', serif;
             min-height: 100vh;
@@ -43,21 +41,15 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: var(--navy);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            transition: opacity 0.6s ease;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2000; transition: opacity 0.6s ease;
         }
         .typewriter-text {
             color: var(--bg-color);
             font-family: 'Uncial Antiqua', cursive;
-            font-size: 2.5rem;
-            letter-spacing: 5px;
+            font-size: 2.5rem; letter-spacing: 5px;
             border-right: 3px solid var(--bg-color);
-            white-space: nowrap;
-            overflow: hidden;
-            width: 0;
+            white-space: nowrap; overflow: hidden; width: 0;
             padding-right: 5px;
         }
         .cursor-blink { animation: blink 0.7s infinite; }
@@ -74,15 +66,21 @@
             transition: opacity 1s ease;
         }
 
+        /* --- HEADER & LOGO (Fixé à 30px du haut) --- */
+        header {
+            padding-top: 30px; /* Le logo est maintenant précisément à 30px du top */
+            z-index: 600;
+        }
         .logo {
             font-family: 'Uncial Antiqua', cursive;
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.4s ease;
+            font-size: 3.2rem;
         }
 
-        .main-nav { display: flex; justify-content: center; gap: 20px; z-index: 600; }
+        .main-nav { display: flex; justify-content: center; gap: 20px; z-index: 600; margin-bottom: 20px; }
         .main-nav a { text-decoration: none; color: var(--navy); font-size: 0.95rem; transition: 0.3s; cursor: pointer; }
 
         .tab { animation: fadeIn 0.5s ease forwards; }
@@ -91,22 +89,23 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .content { padding-bottom: 20px; }
+        .content { padding-bottom: 20px; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
         .content p { 
             font-size: 1.05rem; 
             line-height: 1.4; 
             max-width: 580px; 
             margin: 0 auto;
+            background: rgba(226, 229, 179, 0.8);
             padding: 15px;
             border-radius: 5px;
         }
 
-        footer { font-size: 0.85rem; width: 100%; z-index: 600; }
+        footer { font-size: 0.85rem; width: 100%; z-index: 600; padding-bottom: 20px; }
 
         .mobile-nav-bg { display: none; }
 
         /* --- Grilles --- */
-        .grid-social { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+        .grid-social { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; width: 100%; }
         .card-social { border: 1px solid var(--navy); padding: 10px 5px; text-decoration: none; color: var(--navy); transition: 0.2s; background: rgba(226, 229, 179, 0.7); }
         .card-social:hover { background: var(--navy); color: var(--bg-color); }
         .card-social span { display: block; font-family: 'Uncial Antiqua'; font-size: 1.2rem; }
@@ -118,7 +117,6 @@
         }
         .res-img { height: 100%; width: 100%; cursor: zoom-in; }
         .res-img img { height: 100%; width: 100%; object-fit: cover; display: block; }
-        
         .btn-dl {
             position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
             background: var(--navy); color: var(--bg-color);
@@ -141,48 +139,22 @@
         }
 
         /* --- RESPONSIVE --- */
-        @media (min-width: 769px) {
-            .container { padding: 40px 0; justify-content: space-between; align-items: center; }
-            header { margin-top: 20px; }
-            .logo { font-size: 3.2rem; margin-top: -50px; }
-            .content { margin-top: -30px; }
-            .res-card:hover .btn-dl { opacity: 1; }
-        }
-
         @media (max-width: 768px) {
-            body { background-size: cover; } /* Sur mobile, cover est plus propre pour les écrans verticaux */
-            .container { display: block; padding-top: 130px; padding-bottom: 140px; height: auto; min-height: 100vh;}
-            header { margin-bottom: 60px; }
+            body { background-size: cover; }
+            .container { display: block; padding-top: 30px; height: auto; min-height: 100vh;}
+            header { margin-bottom: 40px; }
             .logo { font-size: 2.3rem; }
 
             .mobile-nav-bg {
-                display: block;
-                position: fixed;
-                bottom: 0; left: 0;
-                width: 100%;
-                height: 110px;
-                background-color: var(--bg-color);
-                z-index: 550;
+                display: block; position: fixed; bottom: 0; left: 0;
+                width: 100%; height: 110px; background-color: var(--bg-color); z-index: 550;
             }
-
             .main-nav { 
-                position: fixed; 
-                bottom: 45px; 
-                left: 0; width: 100%; 
-                background-color: var(--bg-color);
-                padding: 10px 0; 
-                gap: 40px; 
+                position: fixed; bottom: 45px; left: 0; width: 100%; 
+                background-color: var(--bg-color); padding: 10px 0; gap: 40px; 
             }
-            
-            footer { 
-                position: fixed; 
-                bottom: 0; left: 0; 
-                padding-bottom: 15px; 
-                background-color: transparent; 
-            }
-
+            footer { position: fixed; bottom: 0; left: 0; padding-bottom: 15px; background-color: transparent; }
             .grid-social { grid-template-columns: repeat(2, 1fr); }
-            .grid-ressources { flex-direction: column; align-items: center; }
             .res-card { height: 450px; width: 80%; }
         }
     </style>
@@ -196,27 +168,29 @@
     <div class="mobile-nav-bg"></div>
 
     <div class="container" id="main-content">
+        <header>
+            <h1 id="main-logo" class="logo" onclick="show('home')">TRADISCOUT</h1>
+        </header>
+
         <nav class="main-nav">
             <a onclick="show('home')">accueil</a>
             <a onclick="show('rejoindre')">rejoindre</a>
             <a onclick="show('ressources')">ressources</a>
         </nav>
 
-        <header>
-            <h1 id="main-logo" class="logo" onclick="show('home')">TRADISCOUT</h1>
-        </header>
-
         <main class="content">
             <div id="home" class="tab">
                 <p>Depuis début 2025, nous aidons les jeunes à vivre leur foi tous les jours, par le scoutisme.
-                    Ce qui n’était au départ qu’un simple compte insta pour rigoler est devenue une véritable communauté, animée par une équipe de 7 jeunes, offrant à tous des débats, du contenu, et des nouvelles sur le scoutisme et la chrétienté à travers l’Europe et plus particulièrement en France.</p>
+                    Ce qui n’était au départ qu’un simple compte insta de rigolade, est devenue une véritable communauté animée par une équipe de 7 jeunes, offrant à tous des débats, du contenu, et des nouvelles sur le scoutisme et la chrétienté à travers l’Europe et plus particulièrement en France.</p>
             </div>
 
             <div id="rejoindre" class="tab" style="display:none">
                 <div class="grid-social">
                     <a href="#" class="card-social"><span>01</span><small>Instagram</small></a>
                     <a href="#" class="card-social"><span>02</span><small>Pinterest</small></a>
-                    <a href="#" class="card-social"><span>03</span><small>Groupe de prière</small></a>
+                    <a href="#" class="card-social"><span>03</span><small>YouTube</small></a>
+                    <a href="#" class="card-social"><span>04</span><small>TikTok</small></a>
+                    <a href="#" class="card-social"><span>05</span><small>Discord</small></a>
                 </div>
             </div>
 
