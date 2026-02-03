@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tradiscout - Semper Parati</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sanchez&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #e2e5b3; 
+            --navy: #0a1d37;    
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.05) 100%);
+            color: var(--navy);
+            font-family: 'Sanchez', serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        /* --- ÉCRAN DE CHARGEMENT --- */
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--navy);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.6s ease;
+        }
+        .typewriter-text {
+            color: var(--bg-color);
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 2.5rem;
+            letter-spacing: 5px;
+            border-right: 3px solid var(--bg-color);
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            padding-right: 5px;
+        }
+        .cursor-blink { animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .logo {
+            font-family: 'Uncial Antiqua', cursive;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .main-nav { display: flex; justify-content: center; gap: 20px; z-index: 600; }
+        .main-nav a { text-decoration: none; color: var(--navy); font-size: 0.95rem; transition: 0.3s; cursor: pointer; }
+
+        .tab { animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content { padding-bottom: 20px; }
+        .content p { font-size: 1.05rem; line-height: 1.4; max-width: 580px; margin: 0 auto; }
+
+        footer { font-size: 0.85rem; width: 100%; z-index: 600; }
+
+        /* Bloc invisible par défaut, utilisé sur mobile */
+        .mobile-nav-bg { display: none; }
+
+        /* --- Grilles --- */
+        .grid-social { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
+        .card-social { border: 1px solid var(--navy); padding: 10px 5px; text-decoration: none; color: var(--navy); transition: 0.2s; }
+        .card-social:hover { background: var(--navy); color: var(--bg-color); }
+        .card-social span { display: block; font-family: 'Uncial Antiqua'; font-size: 1.2rem; }
+        
+        .grid-ressources { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .res-card {
+            position: relative; border: 1px solid var(--navy);
+            height: 320px; aspect-ratio: 9 / 16; overflow: hidden; background: #000;
+        }
+        .res-img { height: 100%; width: 100%; cursor: zoom-in; }
+        .res-img img { height: 100%; width: 100%; object-fit: cover; display: block; }
+        
+        .btn-dl {
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+            background: var(--navy); color: var(--bg-color);
+            text-decoration: none; font-size: 0.7rem; padding: 8px 12px;
+            text-transform: uppercase; opacity: 0; transition: 0.3s; border-radius: 2px;
+        }
+
+        /* --- Lightbox --- */
+        #lightbox {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(10,29,55,0.95); display:none; flex-direction: column; 
+            justify-content:center; align-items:center; z-index:1000;
+        }
+        .lightbox-box { width: 85%; max-width: 320px; aspect-ratio: 9 / 16; position: relative; }
+        .lightbox-box img { width: 100%; height: 100%; object-fit: cover; }
+        .lb-dl {
+            margin-top: 20px; background: var(--bg-color); color: var(--navy);
+            padding: 12px 25px; text-decoration: none; text-transform: uppercase;
+            font-size: 0.9rem; font-weight: bold;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (min-width: 769px) {
+            .container { padding: 40px 0; justify-content: space-between; align-items: center; }
+            header { margin-top: 20px; }
+            .logo { font-size: 3.2rem; margin-top: -50px; }
+            .content { margin-top: -30px; }
+            .res-card:hover .btn-dl { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .container { display: block; padding-top: 130px; padding-bottom: 140px; height: auto; min-height: 100vh;}
+            header { margin-bottom: 60px; }
+            .logo { font-size: 2.3rem; }
+
+            /* UNIFICATION DU FOND MOBILE */
+            .mobile-nav-bg {
+                display: block;
+                position: fixed;
+                bottom: 0; left: 0;
+                width: 100%;
+                height: 110px; /* Couvre nav + gap + footer */
+                background-color: var(--bg-color);
+                z-index: 550;
+            }
+
+            .main-nav { 
+                position: fixed; 
+                bottom: 45px; /* Ajusté pour boucher le trou */
+                left: 0; width: 100%; 
+                background-color: var(--bg-color); /* Le fond est géré par mobile-nav-bg */
+                padding: 10px 0; 
+                gap: 40px; 
+            }
+            
+            footer { 
+                position: fixed; 
+                bottom: 0; left: 0; 
+                padding-bottom: 15px; 
+                background-color: transparent; 
+            }
+
+            .grid-social { grid-template-columns: repeat(2, 1fr); }
+            .grid-ressources { flex-direction: column; align-items: center; }
+            .res-card { height: 450px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div id="typewriter" class="typewriter-text cursor-blink"></div>
+    </div>
+
+    <div class="mobile-nav-bg"></div>
+
+    <div class="container" id="main-content">
+        <nav class="main-nav">
+            <a onclick="show('home')">accueil</a>
+            <a onclick="show('rejoindre')">rejoindre</a>
+            <a onclick="show('ressources')">ressources</a>
+        </nav>
+
+        <header>
+            <h1 id="main-logo" class="logo" onclick="show('home')">TRADISCOUT</h1>
+        </header>
+
+        <main class="content">
+            <div id="home" class="tab">
+                <p>Depuis début 2025, nous aidons les jeunes à vivre leur foi tous les jours, par le scoutisme.
+                    Ce qui n’était au départ qu’un simple compte insta de rigolade, est devenue une véritable communauté animée par une équipe de 7 jeunes, offrant à tous des débats, du contenu, et des nouvelles sur le scoutisme et la chrétienté à travers l’Europe et plus particulièrement en France.</p>
+            </div>
+
+            <div id="rejoindre" class="tab" style="display:none">
+                <div class="grid-social">
+                    <a href="#" class="card-social"><span>01</span><small>Instagram</small></a>
+                    <a href="#" class="card-social"><span>02</span><small>Pinterest</small></a>
+                    <a href="#" class="card-social"><span>03</span><small>YouTube</small></a>
+                    <a href="#" class="card-social"><span>04</span><small>TikTok</small></a>
+                    <a href="#" class="card-social"><span>05</span><small>Discord</small></a>
+                </div>
+            </div>
+
+            <div id="ressources" class="tab" style="display:none">
+                <div class="grid-ressources">
+                    <div class="res-card">
+                        <div class="res-img" onclick="openLB('URL_IMAGE_1')">
+                            <img src="URL_IMAGE_1">
+                        </div>
+                        <a href="URL_IMAGE_1" class="btn-dl" download>Télécharger</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>2026 tradiscout - semper parati</p>
+        </footer>
+    </div>
+
+    <div id="lightbox" onclick="closeLB(event)">
+        <div class="lightbox-box"><img id="lb-img" src=""></div>
+        <a href="#" id="lb-dl-link" class="lb-dl" download>Télécharger</a>
+    </div>
+
+    <script>
+        const text = "TRADISCOUT";
+        const target = document.getElementById('typewriter');
+        let i = 0;
+
+        function type() {
+            if (i < text.length) {
+                target.innerText += text.charAt(i);
+                i++;
+                target.style.width = 'auto'; 
+                setTimeout(type, 120);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('loader').style.opacity = '0';
+                    document.getElementById('main-content').style.opacity = '1';
+                    setTimeout(() => {
+                        document.getElementById('loader').style.display = 'none';
+                    }, 600);
+                }, 800);
+            }
+        }
+
+        window.addEventListener('load', () => { setTimeout(type, 500); });
+
+        function show(id) {
+            document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+            const logo = document.getElementById('main-logo');
+            if (id === 'rejoindre') logo.innerText = "rejoins-nous!";
+            else if (id === 'ressources') logo.innerText = "fonds d'ecrans";
+            else logo.innerText = "TRADISCOUT";
+            window.scrollTo(0,0);
+        }
+
+        function openLB(src) {
+            document.getElementById('lb-img').src = src;
+            document.getElementById('lb-dl-link').href = src;
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+
+        function closeLB(e) {
+            if(e.target.id === 'lightbox') document.getElementById('lightbox').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
