@@ -13,12 +13,22 @@
         :root {
             --bg-color: #e2e5b3; 
             --navy: #0a1d37;    
+            --overlay-yellow: rgba(226, 229, 179, 0.6); /* Filtre jaune */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-image: url('IMG_5189.jpeg');
+            /* Image 100% largeur, centrée en hauteur avec filtre jaune */
+            background-image: 
+                linear-gradient(var(--overlay-yellow), var(--overlay-yellow)),
+                url('IMG_5189.jpeg');
+            background-size: 100% auto; /* 100% largeur */
+            background-position: center center; /* Centré */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: var(--bg-color);
+            
             color: var(--navy);
             font-family: 'Sanchez', serif;
             min-height: 100vh;
@@ -82,23 +92,30 @@
         }
 
         .content { padding-bottom: 20px; }
-        .content p { font-size: 1.05rem; line-height: 1.4; max-width: 580px; margin: 0 auto; }
+        .content p { 
+            font-size: 1.05rem; 
+            line-height: 1.4; 
+            max-width: 580px; 
+            margin: 0 auto;
+            background: rgba(226, 229, 179, 0.8); /* Fond léger pour lisibilité */
+            padding: 15px;
+            border-radius: 5px;
+        }
 
         footer { font-size: 0.85rem; width: 100%; z-index: 600; }
 
-        /* Bloc invisible par défaut, utilisé sur mobile */
         .mobile-nav-bg { display: none; }
 
         /* --- Grilles --- */
         .grid-social { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px; }
-        .card-social { border: 1px solid var(--navy); padding: 10px 5px; text-decoration: none; color: var(--navy); transition: 0.2s; }
+        .card-social { border: 1px solid var(--navy); padding: 10px 5px; text-decoration: none; color: var(--navy); transition: 0.2s; background: rgba(226, 229, 179, 0.7); }
         .card-social:hover { background: var(--navy); color: var(--bg-color); }
         .card-social span { display: block; font-family: 'Uncial Antiqua'; font-size: 1.2rem; }
         
         .grid-ressources { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
         .res-card {
             position: relative; border: 1px solid var(--navy);
-            height: 320px; aspect-ratio: 9 / 16; overflow: hidden; background: #000;
+            width: 220px; aspect-ratio: 9 / 16; overflow: hidden; background: #000;
         }
         .res-img { height: 100%; width: 100%; cursor: zoom-in; }
         .res-img img { height: 100%; width: 100%; object-fit: cover; display: block; }
@@ -134,26 +151,26 @@
         }
 
         @media (max-width: 768px) {
+            body { background-size: cover; } /* Sur mobile, cover est plus propre pour les écrans verticaux */
             .container { display: block; padding-top: 130px; padding-bottom: 140px; height: auto; min-height: 100vh;}
             header { margin-bottom: 60px; }
             .logo { font-size: 2.3rem; }
 
-            /* UNIFICATION DU FOND MOBILE */
             .mobile-nav-bg {
                 display: block;
                 position: fixed;
                 bottom: 0; left: 0;
                 width: 100%;
-                height: 110px; /* Couvre nav + gap + footer */
+                height: 110px;
                 background-color: var(--bg-color);
                 z-index: 550;
             }
 
             .main-nav { 
                 position: fixed; 
-                bottom: 45px; /* Ajusté pour boucher le trou */
+                bottom: 45px; 
                 left: 0; width: 100%; 
-                background-color: var(--bg-color); /* Le fond est géré par mobile-nav-bg */
+                background-color: var(--bg-color);
                 padding: 10px 0; 
                 gap: 40px; 
             }
@@ -167,7 +184,7 @@
 
             .grid-social { grid-template-columns: repeat(2, 1fr); }
             .grid-ressources { flex-direction: column; align-items: center; }
-            .res-card { height: 450px; }
+            .res-card { height: 450px; width: 80%; }
         }
     </style>
 </head>
@@ -200,9 +217,7 @@
                 <div class="grid-social">
                     <a href="#" class="card-social"><span>01</span><small>Instagram</small></a>
                     <a href="#" class="card-social"><span>02</span><small>Pinterest</small></a>
-                    <a href="#" class="card-social"><span>03</span><small>YouTube</small></a>
-                    <a href="#" class="card-social"><span>04</span><small>TikTok</small></a>
-                    <a href="#" class="card-social"><span>05</span><small>Discord</small></a>
+                    <a href="#" class="card-social"><span>03</span><small>Groupe de prière</small></a>
                 </div>
             </div>
 
