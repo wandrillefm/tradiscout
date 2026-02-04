@@ -36,6 +36,15 @@
             overflow-x: hidden;
         }
 
+        /* Cacher la barre de scroll (mais garder le scroll) */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE et Edge */
+            scrollbar-width: none;     /* Firefox */
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;             /* Chrome, Safari, Opera */
+        } [web:2][web:6]
+
         /* --- ÉCRAN DE CHARGEMENT --- */
         #loader {
             position: fixed;
@@ -66,9 +75,9 @@
             transition: opacity 1s ease;
         }
 
-        /* --- HEADER & LOGO (Fixé à 30px du haut) --- */
+        /* --- HEADER & LOGO --- */
         header {
-            padding-top: 30px; /* Le logo est maintenant précisément à 30px du top */
+            padding-top: 30px;
             z-index: 600;
         }
         .logo {
@@ -80,8 +89,20 @@
             font-size: 3.2rem;
         }
 
-        .main-nav { display: flex; justify-content: center; gap: 20px; z-index: 600; margin-bottom: 20px; }
-        .main-nav a { text-decoration: none; color: var(--navy); font-size: 0.95rem; transition: 0.3s; cursor: pointer; }
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 600;
+            margin-bottom: 20px;
+        }
+        .main-nav a {
+            text-decoration: none;
+            color: var(--navy);
+            font-size: 0.95rem;
+            transition: 0.3s;
+            cursor: pointer;
+        }
 
         .tab { animation: fadeIn 0.5s ease forwards; }
         @keyframes fadeIn {
@@ -89,7 +110,15 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .content { padding-bottom: 20px; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        /* Zone centrale scrollable */
+        .content {
+            padding-bottom: 20px;
+            flex-grow: 1;
+            display: block;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        } [web:61]
+
         .content p { 
             font-size: 1.05rem; 
             line-height: 1.4; 
@@ -99,48 +128,91 @@
             border-radius: 5px;
         }
 
-        footer { font-size: 0.85rem; width: 100%; z-index: 600; padding-bottom: 20px; }
+        footer {
+            font-size: 0.85rem;
+            width: 100%;
+            z-index: 600;
+            padding-bottom: 20px;
+        }
 
         .mobile-nav-bg { display: none; }
 
         /* --- Grilles --- */
-        .grid-social { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; width: 100%; }
-        .card-social { border: 1px solid var(--navy); padding: 10px 5px; text-decoration: none; color: var(--navy); transition: 0.2s; background: rgba(226, 229, 179, 0.7); }
-        .card-social:hover { background: var(--navy); color: var(--bg-color); }
-        .card-social span { display: block; font-family: 'Uncial Antiqua'; font-size: 1.2rem; }
-        
-        .grid-ressources { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .grid-social {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .card-social {
+            border: 1px solid var(--navy);
+            padding: 10px 5px;
+            text-decoration: none;
+            color: var(--navy);
+            transition: 0.2s;
+            background: rgba(226, 229, 179, 0.7);
+        }
+        .card-social:hover {
+            background: var(--navy);
+            color: var(--bg-color);
+        }
+        .card-social span {
+            display: block;
+            font-family: 'Uncial Antiqua';
+            font-size: 1.2rem;
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-/* Cacher la barre de scroll (mais garder le scroll) */
-.no-scrollbar {
-    -ms-overflow-style: none;  /* IE et Edge */
-    scrollbar-width: none;     /* Firefox */
-}
-.no-scrollbar::-webkit-scrollbar {
-    display: none;             /* Chrome, Safari, Opera */
-}
-
-        
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             body { background-size: cover; }
-            .container { display: block; padding-top: 30px; height: auto; min-height: 100vh;}
-            header { margin-bottom: 40px; }
+
+            .container {
+                display: flex;
+                flex-direction: column;
+                padding-top: 30px;
+                height: 100vh;
+                min-height: 100vh;
+            }
+
+            header { margin-bottom: 20px; }
             .logo { font-size: 2.3rem; }
 
             .mobile-nav-bg {
-                display: block; position: fixed; bottom: 0; left: 0;
-                width: 100%; height: 110px; background-color: var(--bg-color); z-index: 550;
+                display: block;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 110px;
+                background-color: var(--bg-color);
+                z-index: 550;
             }
-            .main-nav { 
-                position: fixed; bottom: 45px; left: 0; width: 100%; 
-                background-color: var(--bg-color); padding: 10px 0; gap: 40px; padding-top: 30px;
+
+            .main-nav {
+                position: fixed;
+                bottom: 45px;
+                left: 0;
+                width: 100%;
+                background-color: var(--bg-color);
+                padding: 10px 0 0;
+                gap: 40px;
             }
-            footer { position: fixed; bottom: 0; left: 0; padding-bottom: 15px; background-color: transparent; }
+
+            footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                padding-bottom: 15px;
+                background-color: transparent;
+            }
+
             .grid-social { grid-template-columns: repeat(2, 1fr); }
-            .res-card { height: 450px; width: 80%; }
+
+            /* Hauteur utile pour l’iframe Tally sur mobile */
+            #ressources iframe {
+                height: 70vh;
+            } [web:61]
         }
     </style>
 </head>
@@ -180,8 +252,36 @@
             </div>
 
             <div id="ressources" class="tab" style="display:none">
-                <iframe data-tally-src="https://tally.so/embed/81aEQr?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" minwidth="300px" height="1" frameborder="0" marginheight="0" marginwidth="0" title="Contact Tradiscout"></iframe>
-<script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+                <iframe
+                    data-tally-src="https://tally.so/embed/81aEQr?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                    loading="lazy"
+                    width="100%"
+                    minwidth="300px"
+                    height="1"
+                    frameborder="0"
+                    marginheight="0"
+                    marginwidth="0"
+                    title="Contact Tradiscout">
+                </iframe>
+                <script>
+                    var d=document,w="https://tally.so/widgets/embed.js",v=function(){
+                        if(typeof Tally!=="undefined"){
+                            Tally.loadEmbeds();
+                        } else {
+                            d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function(e){
+                                e.src=e.dataset.tallySrc;
+                            });
+                        }
+                    };
+                    if(typeof Tally!=="undefined") v();
+                    else if(d.querySelector('script[src="'+w+'"]')==null){
+                        var s=d.createElement("script");
+                        s.src=w;
+                        s.onload=v;
+                        s.onerror=v;
+                        d.body.appendChild(s);
+                    }
+                </script>
             </div>
         </main>
 
@@ -223,7 +323,6 @@
             else logo.innerText = "TRADISCOUT";
             window.scrollTo(0,0);
         }
-        
     </script>
 </body>
 </html>
