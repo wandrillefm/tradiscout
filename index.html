@@ -142,6 +142,14 @@
             .grid-social { grid-template-columns: repeat(2, 1fr); }
             .res-card { height: 450px; width: 80%; }
         }
+        .mail-link {
+  color: var(--navy);        /* même couleur que le texte */
+  font-weight: 600;          /* un peu plus épais */
+  text-decoration: underline;
+  text-decoration-thickness: 2px; /* souligné plus épais */
+  text-underline-offset: 3px;
+}
+
     </style>
 </head>
 <body class="no-scrollbar">
@@ -181,7 +189,7 @@
 
             <div id="ressources" class="tab" style="display:none">
                 <p>Vous souhaitez nous envoyer une photo, une idée de mèmes, une suggestion ou nous signaler un problème?</p>
-                <a href="mailto:tradiscout@gmail.com">Envoyez nous un mail!</a>
+                <a href="mailto:tradiscout@gmail.com class="mail-link"">Envoyez nous un mail!</a>
             </div>
         </main>
 
