@@ -190,11 +190,6 @@
         </footer>
     </div>
 
-    <div id="lightbox" onclick="closeLB(event)">
-        <div class="lightbox-box"><img id="lb-img" src=""></div>
-        <a href="#" id="lb-dl-link" class="lb-dl" download>Télécharger</a>
-    </div>
-
     <script>
         const text = "TRADISCOUT";
         const target = document.getElementById('typewriter');
@@ -228,16 +223,7 @@
             else logo.innerText = "TRADISCOUT";
             window.scrollTo(0,0);
         }
-
-        function openLB(src) {
-            document.getElementById('lb-img').src = src;
-            document.getElementById('lb-dl-link').href = src;
-            document.getElementById('lightbox').style.display = 'flex';
-        }
-
-        function closeLB(e) {
-            if(e.target.id === 'lightbox') document.getElementById('lightbox').style.display = 'none';
-        }
+        
     </script>
 </body>
 </html>
