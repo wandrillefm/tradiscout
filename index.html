@@ -110,33 +110,19 @@
         .card-social span { display: block; font-family: 'Uncial Antiqua'; font-size: 1.2rem; }
         
         .grid-ressources { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
-        .res-card {
-            position: relative; border: 1px solid var(--navy);
-            width: 220px; aspect-ratio: 9 / 16; overflow: hidden; background: #000;
-        }
-        .res-img { height: 100%; width: 100%; cursor: zoom-in; }
-        .res-img img { height: 100%; width: 100%; object-fit: cover; display: block; }
-        .btn-dl {
-            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-            background: var(--navy); color: var(--bg-color);
-            text-decoration: none; font-size: 0.7rem; padding: 8px 12px;
-            text-transform: uppercase; opacity: 0; transition: 0.3s; border-radius: 2px;
-        }
 
-        /* --- Lightbox --- */
-        #lightbox {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(10,29,55,0.95); display:none; flex-direction: column; 
-            justify-content:center; align-items:center; z-index:1000;
-        }
-        .lightbox-box { width: 85%; max-width: 320px; aspect-ratio: 9 / 16; position: relative; }
-        .lightbox-box img { width: 100%; height: 100%; object-fit: cover; }
-        .lb-dl {
-            margin-top: 20px; background: var(--bg-color); color: var(--navy);
-            padding: 12px 25px; text-decoration: none; text-transform: uppercase;
-            font-size: 0.9rem; font-weight: bold;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* Cacher la barre de scroll (mais garder le scroll) */
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE et Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+
+        
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             body { background-size: cover; }
@@ -158,7 +144,7 @@
         }
     </style>
 </head>
-<body>
+<body class="no-scrollbar">
 
     <div id="loader">
         <div id="typewriter" class="typewriter-text cursor-blink"></div>
