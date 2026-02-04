@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tradiscout</title>
+    <title>Tradiscout - Semper Parati</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,15 +17,6 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        /* Cacher la barre de scroll (mais garder le scroll) */
-        .no-scrollbar {
-            -ms-overflow-style: none;  /* IE et Edge */
-            scrollbar-width: none;     /* Firefox */
-        }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;             /* Chrome, Safari, Opera */
-        } [web:2][web:6][web:21]
 
         body {
             background-image: 
@@ -77,7 +68,7 @@
 
         /* --- HEADER & LOGO (Fixé à 30px du haut) --- */
         header {
-            padding-top: 30px;
+            padding-top: 30px; /* Le logo est maintenant précisément à 30px du top */
             z-index: 600;
         }
         .logo {
@@ -167,7 +158,7 @@
         }
     </style>
 </head>
-<body class="no-scrollbar">
+<body>
 
     <div id="loader">
         <div id="typewriter" class="typewriter-text cursor-blink"></div>
@@ -196,7 +187,7 @@
                 <div class="grid-social">
                     <a href="https://instagram.com/tradiscout" class="card-social"><small>Instagram</small><span>4200+ personnes</span></a>
                     <a href="https://pinterest.com/tradiscout" class="card-social"><small>Pinterest</small><span>20+ fonds d'écrans</span></a>
-                    <a href="https://instagram.com/channel/AbYQB1ZxjbUUhCE5" class="card-social"><small>Groupe de prière</small><span>Tout les vendredis</span></a>
+                    <a href="https://instagram.com/channel/AbYQB1ZxjbUUhCE5" class="card-social"><small>Groupe de priere</small><span>Tout les vendredis</span></a>
                     <a href="https://www.deezer.com/fr/playlist/13549630343?host=0&utm_campaign=clipboard-generic&utm_source=user_sharing&utm_content=playlist-13549630343&deferredFl=1&universal_link=1" class="card-social"><small>Deezer</small><span>615 titres</span></a>
                     <a href="https://open.spotify.com/playlist/4dol5mUeugWo8hvZdXnvZ8?si=Nt_9ywu5RKafZfrsUyR3Tg&nd=1&dlsi=df14b7be1f7a45ef" class="card-social"><small>Spotify</small><span>494 titres</span></a>
                 </div>
@@ -204,20 +195,12 @@
 
             <div id="ressources" class="tab" style="display:none">
                 <iframe data-tally-src="https://tally.so/embed/81aEQr?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" minwidth="300px" height="1" frameborder="0" marginheight="0" marginwidth="0" title="Contact Tradiscout"></iframe>
-                <script>
-                    var d=document,w="https://tally.so/widgets/embed.js",v=function(){
-                        "undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))
-                    };
-                    if("undefined"!=typeof Tally)v();
-                    else if(d.querySelector('script[src="'+w+'"]')==null){
-                        var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);
-                    }
-                </script>
+<script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
             </div>
         </main>
 
         <footer>
-            <p>2026 Tradiscout - Verso l'Alto!</p>
+            <p>2026 tradiscout - semper parati</p>
         </footer>
     </div>
 
@@ -271,4 +254,4 @@
         }
     </script>
 </body>
-</html>
+</html> hide the scroll bar please
