@@ -109,7 +109,7 @@
         .card-social:hover { background: var(--navy); color: var(--bg-color); }
         .card-social span { display: block; font-family: 'Uncial Antiqua'; font-size: 1.2rem; }
         
-        .grid-ressources { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .grid-contact { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -166,7 +166,7 @@
         <nav class="main-nav">
             <a onclick="show('home')">accueil</a>
             <a onclick="show('rejoindre')">rejoindre</a>
-            <a onclick="show('ressources')">contact</a>
+            <a onclick="show('contact')">contact</a>
         </nav>
 
         <main class="content">
@@ -185,7 +185,7 @@
                 </div>
             </div>
 
-            <div id="ressources" class="tab" style="display:none">
+            <div id="contact" class="tab" style="display:none">
                 <p>Vous souhaitez nous envoyer une photo, une idée de mèmes, une suggestion ou nous signaler un problème?</p>
                 <a href="mailto:tradiscout@gmail.com" class="mail-link">Envoyez nous un mail!</a>
             </div>
@@ -225,7 +225,7 @@
             document.getElementById(id).style.display = 'block';
             const logo = document.getElementById('main-logo');
             if (id === 'rejoindre') logo.innerText = "rejoins-nous!";
-            else if (id === 'ressources') logo.innerText = "fonds d'ecrans";
+            else if (id === 'contact') logo.innerText = "fonds d'ecrans";
             else logo.innerText = "TRADISCOUT";
             window.scrollTo(0,0);
         }
