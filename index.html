@@ -241,7 +241,8 @@
                 </div>
             </div>
 
-            <div id="boutique" class="tab" style="display:none">
+<div id="boutique" class="tab" style="display:none; padding-bottom:70px;">
+
     <div>
         <p>Sweats et tshirts Tradiscout pour porter la flamme scout au quotidien!</p>
         <p>!!!!! EN TRAVAUX !!!!!</p>
@@ -370,7 +371,6 @@ else logo.innerText = "TRADISCOUT";
         }
 
 
-
 // --- CATALOGUE PRODUITS (5 produits) ---
 const products = {
   tshirt_valto: {
@@ -411,7 +411,7 @@ const checkoutEmailInput = document.getElementById('checkout-email');
 const checkoutMessage = document.getElementById('checkout-message');
 
 // Ajouter un produit au panier
-function addToCart(productId) {
+function addToCart(productId, buttonEl) {
   const product = products[productId];
   if (!product) return;
 
@@ -422,10 +422,21 @@ function addToCart(productId) {
     cart.push({ ...product, qty: 1 });
   }
   renderCart();
+
+  // Feedback "bien ajouté !"
+  if (buttonEl) {
+    const originalText = buttonEl.textContent;
+    buttonEl.textContent = "bien ajouté !";
+    buttonEl.disabled = true;
+    setTimeout(() => {
+      buttonEl.textContent = originalText;
+      buttonEl.disabled = false;
+    }, 1200);
+  }
 }
 
-// Retirer une unité d'un produit
-function removeOneFromCart(productId) {
+// Retirer 1 unité (bouton -)
+function decrementCartItem(productId) {
   const idx = cart.findIndex(item => item.id === productId);
   if (idx === -1) return;
 
@@ -433,6 +444,14 @@ function removeOneFromCart(productId) {
   if (cart[idx].qty <= 0) {
     cart.splice(idx, 1);
   }
+  renderCart();
+}
+
+// Ajouter 1 unité (bouton +)
+function incrementCartItem(productId) {
+  const item = cart.find(i => i.id === productId);
+  if (!item) return;
+  item.qty += 1;
   renderCart();
 }
 
@@ -450,19 +469,28 @@ function renderCart() {
 
   cart.forEach(item => {
     const li = document.createElement('li');
-    li.textContent = `${item.name} x ${item.qty} — ${item.price * item.qty} €`;
+
+    const labelSpan = document.createElement('span');
+    labelSpan.textContent = `${item.name} — ${item.price * item.qty} € (x${item.qty})`;
 
     const minusBtn = document.createElement('button');
     minusBtn.textContent = '-';
     minusBtn.style.marginLeft = '8px';
-    minusBtn.onclick = () => removeOneFromCart(item.id);
+    minusBtn.onclick = () => decrementCartItem(item.id);
+
+    const plusBtn = document.createElement('button');
+    plusBtn.textContent = '+';
+    plusBtn.style.marginLeft = '4px';
+    plusBtn.onclick = () => incrementCartItem(item.id);
 
     const removeBtn = document.createElement('button');
     removeBtn.textContent = 'retirer';
     removeBtn.style.marginLeft = '4px';
     removeBtn.onclick = () => removeFromCart(item.id);
 
+    li.appendChild(labelSpan);
     li.appendChild(minusBtn);
+    li.appendChild(plusBtn);
     li.appendChild(removeBtn);
 
     cartList.appendChild(li);
@@ -472,7 +500,7 @@ function renderCart() {
   cartTotal.innerHTML = `<strong>Total :</strong> ${total} €`;
 }
 
-// Gestion du submit pour l'instant : juste log dans la console
+// Gestion du submit (toujours version console)
 if (checkoutForm) {
   checkoutForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -488,7 +516,6 @@ if (checkoutForm) {
       return;
     }
 
-    // Étape temporaire : juste afficher dans la console
     console.log('COMMANDE A ENVOYER :', {
       email,
       cart
@@ -496,10 +523,10 @@ if (checkoutForm) {
 
     checkoutMessage.textContent =
       "Commande préparée côté site (pas encore reliée au paiement).";
-
-    // Plus tard : appel à la fonction Supabase / Stripe
   });
 }
+
+
 
 
         
