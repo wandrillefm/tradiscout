@@ -528,13 +528,20 @@ if (checkoutForm) {
       return;
     }
 
+    // Étape actuelle : on log juste, plus tard on appellera Supabase / Stripe
     console.log('COMMANDE A ENVOYER :', {
       email,
       cart
     });
 
+    // Message pour l'utilisateur
     checkoutMessage.textContent =
-      "Commande préparée côté site (pas encore reliée au paiement).";
+      "Votre commande a été envoyée, vous allez recevoir un lien de paiement sous peu, à votre adresse email.";
+
+    // On vide le panier et le formulaire
+    cart = [];
+    renderCart();
+    checkoutForm.reset();
   });
 }
 
