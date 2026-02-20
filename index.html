@@ -340,9 +340,11 @@
             document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
             document.getElementById(id).style.display = 'block';
             const logo = document.getElementById('main-logo');
-            if (id === 'rejoindre') logo.innerText = "rejoins-nous!";
-            else if (id === 'contact') logo.innerText = "contact";
-            else logo.innerText = "TRADISCOUT";
+if (id === 'rejoindre') logo.innerText = "rejoins-nous!";
+else if (id === 'boutique') logo.innerText = "boutique";
+else if (id === 'contact') logo.innerText = "contact";
+else logo.innerText = "TRADISCOUT";
+
             window.scrollTo(0,0);
         }
         
