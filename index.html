@@ -470,12 +470,6 @@ function incrementCartItem(productId) {
   renderCart();
 }
 
-// Supprimer complètement un produit
-function removeFromCart(productId) {
-  cart = cart.filter(item => item.id !== productId);
-  renderCart();
-}
-
 // Afficher le panier à l'écran
 function renderCart() {
   cartList.innerHTML = '';
@@ -504,14 +498,8 @@ function renderCart() {
     plusBtn.className = 'cart-btn';
     plusBtn.onclick = () => incrementCartItem(item.id);
 
-    const removeBtn = document.createElement('button');
-    removeBtn.textContent = 'retirer';
-    removeBtn.className = 'cart-btn';
-    removeBtn.onclick = () => removeFromCart(item.id);
-
     btnWrapper.appendChild(minusBtn);
     btnWrapper.appendChild(plusBtn);
-    btnWrapper.appendChild(removeBtn);
 
     li.appendChild(labelSpan);
     li.appendChild(btnWrapper);
