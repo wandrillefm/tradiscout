@@ -640,62 +640,62 @@
           cartTotal.innerHTML = `<strong>Total :</strong> ${total} €`;
         }
 
-// Submit commande : enregistrement dans Supabase.orders
-if (checkoutForm) {
-  checkoutForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
+        // Submit commande : enregistrement dans Supabase.orders
+        if (checkoutForm) {
+          checkoutForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
 
-    if (cart.length === 0) {
-      checkoutMessage.textContent = "Ton panier est vide.";
-      return;
-    }
+            if (cart.length === 0) {
+              checkoutMessage.textContent = "Ton panier est vide.";
+              return;
+            }
 
-    const email = checkoutEmailInput.value.trim();
-    if (!email) {
-      checkoutMessage.textContent = "Merci d'entrer un email.";
-      return;
-    }
+            const email = checkoutEmailInput.value.trim();
+            if (!email) {
+              checkoutMessage.textContent = "Merci d'entrer un email.";
+              return;
+            }
 
-    // calcul du total en centimes
-    let amount_cents = 0;
-cart.forEach((item) => {
-  amount_cents += item.price * 100 * item.qty;
-});
+            // calcul du total en centimes
+            let amount_cents = 0;
+            cart.forEach((item) => {
+              amount_cents += item.price * 100 * item.qty;
+            });
 
-const { error } = await supabaseClient
-  .from('orders')
-  .insert([
-    {
-      email,
-      amount_cents,
-      currency: 'eur',
-      cart_json: cart,
-      status: 'pending',
-    }
-  ]);
+            try {
+              const { error } = await supabaseClient
+                .from('orders')
+                .insert([
+                  {
+                    email,
+                    amount_cents,
+                    currency: 'eur',
+                    cart_json: JSON.stringify(cart), // ta colonne est en text
+                    status: 'pending',
+                  }
+                ]);
 
+              if (error) {
+                console.error('Erreur Supabase insert orders:', error);
+                checkoutMessage.textContent =
+                  "Impossible d'enregistrer la commande, réessaie plus tard.";
+                return;
+              }
 
-      if (error) {
-        console.error('Erreur Supabase insert orders:', error);
-        checkoutMessage.textContent =
-          "Impossible d'enregistrer la commande, réessaie plus tard.";
-        return;
-      }
-
-      // vider panier + formulaire
-      cart = [];
-      renderCart();
-      checkoutForm.reset();
-
-      // pop-up de confirmation
-      openOrderPopup();
-    } catch (err) {
-      console.error(err);
-      checkoutMessage.textContent =
-        "Erreur inattendue, réessaie dans quelques minutes.";
-    }
-  });
-}
+              // vider panier + formulaire
+              cart = [];
+              renderCart();
+              checkoutForm.reset();
+        
+              // pop-up de confirmation
+              openOrderPopup();
+            } catch (err) {
+              console.error(err);
+              checkoutMessage.textContent =
+                "Erreur inattendue, réessaie dans quelques minutes.";
+            }
+          });
+        }
 
     </script>
 </body>
