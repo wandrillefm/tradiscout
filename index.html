@@ -148,6 +148,60 @@
   text-decoration: underline;
 }
 
+
+        .grid-shop {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+}
+.product-card {
+    border: 1px solid var(--navy);
+    background: rgba(226, 229, 179, 0.8);
+    padding: 10px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.product-title {
+    font-family: 'Uncial Antiqua', cursive;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+.product-desc {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+.product-price {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.product-cta {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--navy);
+    background-color: var(--navy);
+    color: var(--bg-color);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.product-cta:hover {
+    background-color: var(--bg-color);
+    color: var(--navy);
+}
+
+@media (max-width: 768px) {
+    .grid-shop {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+        
     </style>
 </head>
 <body class="no-scrollbar">
@@ -166,6 +220,7 @@
         <nav class="main-nav">
             <a onclick="show('home')">accueil</a>
             <a onclick="show('rejoindre')">rejoindre</a>
+            <a onclick="show('boutique')">boutique</a>
             <a onclick="show('contact')">contact</a>
         </nav>
 
@@ -186,6 +241,66 @@
                 </div>
             </div>
 
+            <div id="boutique" class="tab" style="display:none">
+    <div>
+        <p>Merch Tradiscout pour soutenir la mission et porter la flamme scout au quotidien.</p>
+    </div>
+    <div class="grid-shop">
+        <!-- 3 TSHIRTS -->
+        <div class="product-card">
+            <div class="product-title">T‑shirt Verso l'Alto</div>
+            <div class="product-desc">Coupe unisexe, coton bio, motif discret sur le coeur.</div>
+            <div class="product-price">20 €</div>
+            <a href="https://buy.stripe.com/00w28tc1V8ue1yJ9yY8g001"
+               class="product-cta" target="_blank" rel="noopener noreferrer">
+                Commander - 20 €
+            </a>
+        </div>
+
+        <div class="product-card">
+            <div class="product-title">T‑shirt Tradiscout</div>
+            <div class="product-desc">Logo Tradiscout, parfait pour les camps et les WE.</div>
+            <div class="product-price">20 €</div>
+            <a href="https://buy.stripe.com/00w28tc1V8ue1yJ9yY8g001"
+               class="product-cta" target="_blank" rel="noopener noreferrer">
+                Commander - 20 €
+            </a>
+        </div>
+
+        <div class="product-card">
+            <div class="product-title">T‑shirt “Ora et Labora”</div>
+            <div class="product-desc">Design inspiré de la vie de patrouille.</div>
+            <div class="product-price">20 €</div>
+            <a href="https://buy.stripe.com/00w28tc1V8ue1yJ9yY8g001"
+               class="product-cta" target="_blank" rel="noopener noreferrer">
+                Commander - 20 €
+            </a>
+        </div>
+
+        <!-- 2 SWEATS -->
+        <div class="product-card">
+            <div class="product-title">Sweat Verso l'Alto</div>
+            <div class="product-desc">Sweat capuche, intérieur doux, pour les veillées fraîches.</div>
+            <div class="product-price">40 €</div>
+            <a href="https://buy.stripe.com/9B64gBaXR7qa3GRfXm8g002"
+               class="product-cta" target="_blank" rel="noopener noreferrer">
+                Commander - 40 €
+            </a>
+        </div>
+
+        <div class="product-card">
+            <div class="product-title">Sweat Tradiscout</div>
+            <div class="product-desc">Logo brodé, style sobre pour la ville comme pour le camp.</div>
+            <div class="product-price">40 €</div>
+            <a href="https://buy.stripe.com/9B64gBaXR7qa3GRfXm8g002"
+               class="product-cta" target="_blank" rel="noopener noreferrer">
+                Commander - 40 €
+            </a>
+        </div>
+    </div>
+</div>
+
+            
             <div id="contact" class="tab" style="display:none">
                 <p>Vous souhaitez nous envoyer une photo, une idée de mèmes, une suggestion ou nous signaler un problème?</p>
                 <a href="mailto:tradiscout@gmail.com" class="mail-link">Envoyez nous un mail!</a>
