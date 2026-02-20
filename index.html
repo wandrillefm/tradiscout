@@ -66,9 +66,9 @@
             transition: opacity 1s ease;
         }
 
-        /* --- HEADER & LOGO (Fixé à 30px du haut) --- */
+        /* --- HEADER & LOGO --- */
         header {
-            padding-top: 30px; /* Le logo est maintenant précisément à 30px du top */
+            padding-top: 30px;
             z-index: 600;
         }
         .logo {
@@ -80,8 +80,20 @@
             font-size: 3.2rem;
         }
 
-        .main-nav { display: flex; justify-content: center; gap: 20px; z-index: 600; margin-bottom: 20px; }
-        .main-nav a { text-decoration: none; color: var(--navy); font-size: 0.95rem; transition: 0.3s; cursor: pointer; }
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 600;
+            margin-bottom: 20px;
+        }
+        .main-nav a {
+            text-decoration: none;
+            color: var(--navy);
+            font-size: 0.95rem;
+            transition: 0.3s;
+            cursor: pointer;
+        }
 
         .tab { animation: fadeIn 0.5s ease forwards; }
         @keyframes fadeIn {
@@ -89,7 +101,13 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .content { padding-bottom: 20px; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        .content {
+            padding-bottom: 20px;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .content p { 
             font-size: 1.05rem; 
             line-height: 1.4; 
@@ -99,124 +117,171 @@
             border-radius: 5px;
         }
 
-        footer { font-size: 0.85rem; width: 100%; z-index: 600; padding-bottom: 20px; }
+        footer {
+            font-size: 0.85rem;
+            width: 100%;
+            z-index: 600;
+            padding-bottom: 20px;
+        }
 
         .mobile-nav-bg { display: none; }
 
         /* --- Grilles --- */
-        .grid-social { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; width: 100%; }
-        .card-social { border: 1px solid var(--navy); padding: 10px 5px; text-decoration: none; color: var(--navy); transition: 0.2s; background: rgba(226, 229, 179, 0.7); }
-        .card-social:hover { background: var(--navy); color: var(--bg-color); }
-        .card-social span { display: block; font-family: 'Uncial Antiqua'; font-size: 1.2rem; }
+        .grid-social {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .card-social {
+            border: 1px solid var(--navy);
+            padding: 10px 5px;
+            text-decoration: none;
+            color: var(--navy);
+            transition: 0.2s;
+            background: rgba(226, 229, 179, 0.7);
+        }
+        .card-social:hover {
+            background: var(--navy);
+            color: var(--bg-color);
+        }
+        .card-social span {
+            display: block;
+            font-family: 'Uncial Antiqua';
+            font-size: 1.2rem;
+        }
         
-        .grid-contact { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .grid-contact {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* Cacher la barre de scroll (mais garder le scroll) */
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
 
-/* Cacher la barre de scroll (mais garder le scroll) */
-.no-scrollbar {
-    -ms-overflow-style: none;  /* IE et Edge */
-    scrollbar-width: none;     /* Firefox */
-}
-.no-scrollbar::-webkit-scrollbar {
-    display: none;             /* Chrome, Safari, Opera */
-}
-
-        
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             body { background-size: cover; }
-            .container { display: block; padding-top: 30px; height: auto; min-height: 100vh;}
+            .container {
+                display: block;
+                padding-top: 30px;
+                height: auto;
+                min-height: 100vh;
+            }
             header { margin-bottom: 40px; }
             .logo { font-size: 2.3rem; }
 
             .mobile-nav-bg {
-                display: block; position: fixed; bottom: 0; left: 0;
-                width: 100%; height: 110px; background-color: var(--bg-color); z-index: 550;
+                display: block;
+                position: fixed;
+                bottom: 0; left: 0;
+                width: 100%; height: 110px;
+                background-color: var(--bg-color);
+                z-index: 550;
             }
             .main-nav { 
-                position: fixed; bottom: 45px; left: 0; width: 100%; 
-                background-color: var(--bg-color); padding: 10px 0; gap: 40px; padding-top: 30px;
+                position: fixed;
+                bottom: 45px; left: 0;
+                width: 100%; 
+                background-color: var(--bg-color);
+                padding: 10px 0;
+                gap: 40px;
+                padding-top: 30px;
             }
-            footer { position: fixed; bottom: 0; left: 0; padding-bottom: 15px; background-color: transparent; }
+            footer {
+                position: fixed;
+                bottom: 0; left: 0;
+                padding-bottom: 15px;
+                background-color: transparent;
+            }
             .grid-social { grid-template-columns: repeat(2, 1fr); }
             .res-card { height: 450px; width: 80%; }
         }
-        .mail-link {
-  color: var(--navy);        /* même couleur que le texte */
-  font-weight: 600;          /* un peu plus épais */
-  text-decoration: underline;
-}
 
+        .mail-link {
+            color: var(--navy);
+            font-weight: 600;
+            text-decoration: underline;
+        }
 
         .grid-shop {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    width: 100%;
-    margin-top: 20px;
-}
-.product-card {
-    border: 1px solid var(--navy);
-    background: rgba(226, 229, 179, 0.8);
-    padding: 10px;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-}
-.product-title {
-    font-family: 'Uncial Antiqua', cursive;
-    font-size: 1rem;
-    margin-bottom: 5px;
-}
-.product-desc {
-    font-size: 0.85rem;
-    margin-bottom: 8px;
-}
-.product-price {
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-.product-cta {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 4px;
-    border: 1px solid var(--navy);
-    background-color: var(--navy);
-    color: var(--bg-color);
-    font-size: 0.85rem;
-    text-decoration: none;
-    transition: 0.2s;
-}
-.product-cta:hover {
-    background-color: var(--bg-color);
-    color: var(--navy);
-}
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .product-card {
+            border: 1px solid var(--navy);
+            background: rgba(226, 229, 179, 0.8);
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .product-title {
+            font-family: 'Uncial Antiqua', cursive;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        .product-desc {
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+        .product-price {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .product-cta {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--navy);
+            background-color: var(--navy);
+            color: var(--bg-color);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .product-cta:hover {
+            background-color: var(--bg-color);
+            color: var(--navy);
+        }
 
-@media (max-width: 768px) {
-    .grid-shop {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-.cart-btn {
-  padding: 2px 6px;
-  margin-left: 4px;
-  border-radius: 4px;
-  border: 1px solid var(--navy);
-  background-color: transparent;
-  color: var(--navy);
-  font-size: 0.75rem;
-  cursor: pointer;
-}
+        @media (max-width: 768px) {
+            .grid-shop {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
-.cart-btn:hover {
-  background-color: var(--navy);
-  color: var(--bg-color);
-}
+        .cart-btn {
+            padding: 2px 6px;
+            margin-left: 4px;
+            border-radius: 4px;
+            border: 1px solid var(--navy);
+            background-color: transparent;
+            color: var(--navy);
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
 
-        
+        .cart-btn:hover {
+            background-color: var(--navy);
+            color: var(--bg-color);
+        }
+
     </style>
 </head>
 <body class="no-scrollbar">
@@ -256,88 +321,80 @@
                 </div>
             </div>
 
-<div id="boutique" class="tab" style="display:none; padding-bottom:70px;">
+            <div id="boutique" class="tab" style="display:none; padding-bottom:70px;">
+                <div>
+                    <p>Sweats et tshirts Tradiscout pour porter la flamme scout au quotidien!</p>
+                    <p>!!!!! EN TRAVAUX !!!!!</p>
+                </div>
 
-    <div>
-        <p>Sweats et tshirts Tradiscout pour porter la flamme scout au quotidien!</p>
-        <p>!!!!! EN TRAVAUX !!!!!</p>
+                <div class="grid-shop">
+                    <!-- 3 TSHIRTS -->
+                    <div class="product-card">
+                        <div class="product-title">T‑shirt Verso l'Alto</div>
+                        <div class="product-desc">Coupe unisexe, coton bio, motif discret sur le coeur.</div>
+                        <div class="product-price">18 €</div>
+                        <button class="product-cta" onclick="addToCart('tshirt_valto', this)">
+                            Ajouter au panier
+                        </button>
+                    </div>
 
-    </div>
-    <div class="grid-shop">
-        <!-- 3 TSHIRTS -->
-        <div class="product-card">
-            <div class="product-title">T‑shirt Verso l'Alto</div>
-            <div class="product-desc">Coupe unisexe, coton bio, motif discret sur le coeur.</div>
-            <div class="product-price">18 €</div>
-<button class="product-cta" onclick="addToCart('tshirt_valto')">
-    Ajouter au panier
-</button>
+                    <div class="product-card">
+                        <div class="product-title">T‑shirt Tradiscout</div>
+                        <div class="product-desc">Logo Tradiscout, parfait pour les camps et les WE.</div>
+                        <div class="product-price">18 €</div>
+                        <button class="product-cta" onclick="addToCart('tshirt_tradiscout', this)">
+                            Ajouter au panier
+                        </button>
+                    </div>
 
-        </div>
+                    <div class="product-card">
+                        <div class="product-title">T‑shirt “Ora et Labora”</div>
+                        <div class="product-desc">Design inspiré de la vie de patrouille.</div>
+                        <div class="product-price">18 €</div>
+                        <button class="product-cta" onclick="addToCart('tshirt_ora', this)">
+                            Ajouter au panier
+                        </button>
+                    </div>
 
-        <div class="product-card">
-            <div class="product-title">T‑shirt Tradiscout</div>
-            <div class="product-desc">Logo Tradiscout, parfait pour les camps et les WE.</div>
-            <div class="product-price">18 €</div>
-<button class="product-cta" onclick="addToCart('tshirt_tradiscout')">
-    Ajouter au panier
-</button>
+                    <!-- 2 SWEATS -->
+                    <div class="product-card">
+                        <div class="product-title">Sweat Verso l'Alto</div>
+                        <div class="product-desc">Sweat capuche, intérieur doux, pour les veillées fraîches.</div>
+                        <div class="product-price">29 €</div>
+                        <button class="product-cta" onclick="addToCart('sweat_valto', this)">
+                            Ajouter au panier
+                        </button>
+                    </div>
 
-        </div>
-
-        <div class="product-card">
-            <div class="product-title">T‑shirt “Ora et Labora”</div>
-            <div class="product-desc">Design inspiré de la vie de patrouille.</div>
-            <div class="product-price">18 €</div>
-<button class="product-cta" onclick="addToCart('tshirt_ora')">
-    Ajouter au panier
-</button>
-
-        </div>
-
-        <!-- 2 SWEATS -->
-        <div class="product-card">
-            <div class="product-title">Sweat Verso l'Alto</div>
-            <div class="product-desc">Sweat capuche, intérieur doux, pour les veillées fraîches.</div>
-            <div class="product-price">29 €</div>
-<button class="product-cta" onclick="addToCart('sweat_valto')">
-    Ajouter au panier
-</button>
-
-        </div>
-
-        <div class="product-card">
-            <div class="product-title">Sweat Tradiscout</div>
-            <div class="product-desc">Logo brodé, style sobre pour la ville comme pour le camp.</div>
-            <div class="product-price">29 €</div>
-<button class="product-cta" onclick="addToCart('sweat_tradiscout')">
-    Ajouter au panier
-</button>
-
-        </div>
-    </div>
+                    <div class="product-card">
+                        <div class="product-title">Sweat Tradiscout</div>
+                        <div class="product-desc">Logo brodé, style sobre pour la ville comme pour le camp.</div>
+                        <div class="product-price">29 €</div>
+                        <button class="product-cta" onclick="addToCart('sweat_tradiscout', this)">
+                            Ajouter au panier
+                        </button>
+                    </div>
+                </div>
                 
-<div style="margin-top: 30px; text-align:left; max-width:600px; margin-inline:auto;">
-  <h3>Mon panier</h3>
-  <ul id="cart-list"></ul>
-  <p id="cart-total"><strong>Total :</strong> 0 €</p>
+                <div style="margin-top: 30px; text-align:left; max-width:600px; margin-inline:auto;">
+                    <h3>Mon panier</h3>
+                    <ul id="cart-list"></ul>
+                    <p id="cart-total"><strong>Total :</strong> 0 €</p>
 
-  <h4 style="margin-top:20px;">Valider la commande</h4>
-  <form id="checkout-form">
-    <label for="checkout-email">Votre email :</label><br>
-    <input type="email" id="checkout-email" name="email" required
-           style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
-    <button type="submit" class="product-cta">
-      Valider la commande
-    </button>
-  </form>
+                    <h4 style="margin-top:20px;">Valider la commande</h4>
+                    <form id="checkout-form">
+                        <label for="checkout-email">Votre email :</label><br>
+                        <input type="email" id="checkout-email" name="email" required
+                               style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+                        <button type="submit" class="product-cta">
+                            Valider la commande
+                        </button>
+                    </form>
 
-  <p id="checkout-message" style="margin-top:10px;"></p>
-</div>
+                    <p id="checkout-message" style="margin-top:10px;"></p>
+                </div>
+            </div>
 
-</div>
-
-            
             <div id="contact" class="tab" style="display:none">
                 <p>Vous souhaitez nous envoyer une photo, une idée de mèmes, une suggestion ou nous signaler un problème?</p>
                 <a href="mailto:tradiscout@gmail.com" class="mail-link">Envoyez nous un mail!</a>
@@ -347,6 +404,35 @@
         <footer>
             <p>2026 Tradiscout - Verso l'Alto!</p>
         </footer>
+    </div>
+
+    <!-- Pop-up de confirmation de commande -->
+    <div id="order-popup" style="
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+    ">
+      <div style="
+        background: var(--bg-color);
+        color: var(--navy);
+        padding: 20px 25px;
+        border-radius: 6px;
+        max-width: 320px;
+        text-align: left;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      ">
+        <h3 style="margin-bottom:10px;">Commande envoyée</h3>
+        <p style="font-size:0.95rem; margin-bottom:15px;">
+          Votre commande a été envoyée, vous allez recevoir un lien de paiement sous peu, à votre adresse email.
+        </p>
+        <button type="button" class="product-cta" onclick="closeOrderPopup()">
+          Fermer
+        </button>
+      </div>
     </div>
 
     <script>
@@ -377,178 +463,183 @@
             document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
             document.getElementById(id).style.display = 'block';
             const logo = document.getElementById('main-logo');
-if (id === 'rejoindre') logo.innerText = "rejoins-nous!";
-else if (id === 'boutique') logo.innerText = "boutique";
-else if (id === 'contact') logo.innerText = "contact";
-else logo.innerText = "TRADISCOUT";
+            if (id === 'rejoindre') logo.innerText = "rejoins-nous!";
+            else if (id === 'boutique') logo.innerText = "boutique";
+            else if (id === 'contact') logo.innerText = "contact";
+            else logo.innerText = "TRADISCOUT";
 
             window.scrollTo(0,0);
         }
 
+        // --- CATALOGUE PRODUITS ---
+        const products = {
+          tshirt_valto: {
+            id: 'tshirt_valto',
+            name: "T‑shirt Verso l'Alto",
+            price: 18
+          },
+          tshirt_tradiscout: {
+            id: 'tshirt_tradiscout',
+            name: "T‑shirt Tradiscout",
+            price: 18
+          },
+          tshirt_ora: {
+            id: 'tshirt_ora',
+            name: "T‑shirt “Ora et Labora”",
+            price: 18
+          },
+          sweat_valto: {
+            id: 'sweat_valto',
+            name: "Sweat Verso l'Alto",
+            price: 29
+          },
+          sweat_tradiscout: {
+            id: 'sweat_tradiscout',
+            name: "Sweat Tradiscout",
+            price: 29
+          }
+        };
 
-// --- CATALOGUE PRODUITS (5 produits) ---
-const products = {
-  tshirt_valto: {
-    id: 'tshirt_valto',
-    name: "T‑shirt Verso l'Alto",
-    price: 18
-  },
-  tshirt_tradiscout: {
-    id: 'tshirt_tradiscout',
-    name: "T‑shirt Tradiscout",
-    price: 18
-  },
-  tshirt_ora: {
-    id: 'tshirt_ora',
-    name: "T‑shirt “Ora et Labora”",
-    price: 18
-  },
-  sweat_valto: {
-    id: 'sweat_valto',
-    name: "Sweat Verso l'Alto",
-    price: 29
-  },
-  sweat_tradiscout: {
-    id: 'sweat_tradiscout',
-    name: "Sweat Tradiscout",
-    price: 29
-  }
-};
+        // Panier en mémoire
+        let cart = [];
 
-// Panier en mémoire (tableau d'objets {id, name, price, qty})
-let cart = [];
+        // DOM pour le panier
+        const cartList = document.getElementById('cart-list');
+        const cartTotal = document.getElementById('cart-total');
+        const checkoutForm = document.getElementById('checkout-form');
+        const checkoutEmailInput = document.getElementById('checkout-email');
+        const checkoutMessage = document.getElementById('checkout-message');
+        const orderPopup = document.getElementById('order-popup');
 
-// Récup des éléments DOM
-const cartList = document.getElementById('cart-list');
-const cartTotal = document.getElementById('cart-total');
-const checkoutForm = document.getElementById('checkout-form');
-const checkoutEmailInput = document.getElementById('checkout-email');
-const checkoutMessage = document.getElementById('checkout-message');
+        function openOrderPopup() {
+          if (orderPopup) {
+            orderPopup.style.display = 'flex';
+          }
+        }
 
-// Ajouter un produit au panier
-function addToCart(productId, buttonEl) {
-  const product = products[productId];
-  if (!product) return;
+        function closeOrderPopup() {
+          if (orderPopup) {
+            orderPopup.style.display = 'none';
+          }
+        }
 
-  const existing = cart.find(item => item.id === productId);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ ...product, qty: 1 });
-  }
-  renderCart();
+        // Ajouter un produit
+        function addToCart(productId, buttonEl) {
+          const product = products[productId];
+          if (!product) return;
 
-  // Feedback "bien ajouté !"
-  if (buttonEl) {
-    const originalText = buttonEl.textContent;
-    buttonEl.textContent = "bien ajouté !";
-    buttonEl.disabled = true;
-    setTimeout(() => {
-      buttonEl.textContent = originalText;
-      buttonEl.disabled = false;
-    }, 1200);
-  }
-}
+          const existing = cart.find(item => item.id === productId);
+          if (existing) {
+            existing.qty += 1;
+          } else {
+            cart.push({ ...product, qty: 1 });
+          }
+          renderCart();
 
-// Retirer 1 unité (bouton -)
-function decrementCartItem(productId) {
-  const idx = cart.findIndex(item => item.id === productId);
-  if (idx === -1) return;
+          // Feedback "bien ajouté !"
+          if (buttonEl) {
+            const originalText = buttonEl.textContent;
+            buttonEl.textContent = "bien ajouté !";
+            buttonEl.disabled = true;
+            setTimeout(() => {
+              buttonEl.textContent = originalText;
+              buttonEl.disabled = false;
+            }, 1200);
+          }
+        }
 
-  cart[idx].qty -= 1;
-  if (cart[idx].qty <= 0) {
-    cart.splice(idx, 1);
-  }
-  renderCart();
-}
+        // Retirer 1 unité
+        function decrementCartItem(productId) {
+          const idx = cart.findIndex(item => item.id === productId);
+          if (idx === -1) return;
 
-// Ajouter 1 unité (bouton +)
-function incrementCartItem(productId) {
-  const item = cart.find(i => i.id === productId);
-  if (!item) return;
-  item.qty += 1;
-  renderCart();
-}
+          cart[idx].qty -= 1;
+          if (cart[idx].qty <= 0) {
+            cart.splice(idx, 1);
+          }
+          renderCart();
+        }
 
-// Afficher le panier à l'écran
-function renderCart() {
-  cartList.innerHTML = '';
+        // Ajouter 1 unité
+        function incrementCartItem(productId) {
+          const item = cart.find(i => i.id === productId);
+          if (!item) return;
+          item.qty += 1;
+          renderCart();
+        }
 
-  let total = 0;
+        // Afficher le panier
+        function renderCart() {
+          cartList.innerHTML = '';
 
-  cart.forEach(item => {
-    const li = document.createElement('li');
-    li.style.display = 'flex';
-    li.style.justifyContent = 'space-between';
-    li.style.alignItems = 'center';
-    li.style.marginBottom = '4px';
+          let total = 0;
 
-    const labelSpan = document.createElement('span');
-    labelSpan.textContent = `${item.name} — ${item.price * item.qty} € (x${item.qty})`;
+          cart.forEach(item => {
+            const li = document.createElement('li');
+            li.style.display = 'flex';
+            li.style.justifyContent = 'space-between';
+            li.style.alignItems = 'center';
+            li.style.marginBottom = '4px';
 
-    const btnWrapper = document.createElement('span');
+            const labelSpan = document.createElement('span');
+            labelSpan.textContent = `${item.name} — ${item.price * item.qty} € (x${item.qty})`;
 
-    const minusBtn = document.createElement('button');
-    minusBtn.textContent = '-';
-    minusBtn.className = 'cart-btn';
-    minusBtn.onclick = () => decrementCartItem(item.id);
+            const btnWrapper = document.createElement('span');
 
-    const plusBtn = document.createElement('button');
-    plusBtn.textContent = '+';
-    plusBtn.className = 'cart-btn';
-    plusBtn.onclick = () => incrementCartItem(item.id);
+            const minusBtn = document.createElement('button');
+            minusBtn.textContent = '-';
+            minusBtn.className = 'cart-btn';
+            minusBtn.onclick = () => decrementCartItem(item.id);
 
-    btnWrapper.appendChild(minusBtn);
-    btnWrapper.appendChild(plusBtn);
+            const plusBtn = document.createElement('button');
+            plusBtn.textContent = '+';
+            plusBtn.className = 'cart-btn';
+            plusBtn.onclick = () => incrementCartItem(item.id);
 
-    li.appendChild(labelSpan);
-    li.appendChild(btnWrapper);
+            btnWrapper.appendChild(minusBtn);
+            btnWrapper.appendChild(plusBtn);
 
-    cartList.appendChild(li);
-    total += item.price * item.qty;
-  });
+            li.appendChild(labelSpan);
+            li.appendChild(btnWrapper);
 
-  cartTotal.innerHTML = `<strong>Total :</strong> ${total} €`;
-}
+            cartList.appendChild(li);
+            total += item.price * item.qty;
+          });
 
+          cartTotal.innerHTML = `<strong>Total :</strong> ${total} €`;
+        }
 
-// Gestion du submit (toujours version console)
-if (checkoutForm) {
-  checkoutForm.addEventListener('submit', (event) => {
-    event.preventDefault();
+        // Submit commande (pour l'instant : console + pop-up)
+        if (checkoutForm) {
+          checkoutForm.addEventListener('submit', (event) => {
+            event.preventDefault();
 
-    if (cart.length === 0) {
-      checkoutMessage.textContent = "Ton panier est vide.";
-      return;
-    }
+            if (cart.length === 0) {
+              checkoutMessage.textContent = "Ton panier est vide.";
+              return;
+            }
 
-    const email = checkoutEmailInput.value.trim();
-    if (!email) {
-      checkoutMessage.textContent = "Merci d'entrer un email.";
-      return;
-    }
+            const email = checkoutEmailInput.value.trim();
+            if (!email) {
+              checkoutMessage.textContent = "Merci d'entrer un email.";
+              return;
+            }
 
-    // Étape actuelle : on log juste, plus tard on appellera Supabase / Stripe
-    console.log('COMMANDE A ENVOYER :', {
-      email,
-      cart
-    });
+            // À ce stade : log dans la console
+            console.log('COMMANDE A ENVOYER :', {
+              email,
+              cart
+            });
 
-    // Message pour l'utilisateur
-    checkoutMessage.textContent =
-      "Votre commande a été envoyée, vous allez recevoir un lien de paiement sous peu, à votre adresse email.";
+            // Vider panier + formulaire
+            cart = [];
+            renderCart();
+            checkoutForm.reset();
 
-    // On vide le panier et le formulaire
-    cart = [];
-    renderCart();
-    checkoutForm.reset();
-  });
-}
-
-
-
-
-        
+            // Pop-up de confirmation
+            openOrderPopup();
+          });
+        }
     </script>
 </body>
 </html>
