@@ -610,36 +610,47 @@
         }
 
         // Submit commande (pour l'instant : console + pop-up)
-        if (checkoutForm) {
-          checkoutForm.addEventListener('submit', (event) => {
-            event.preventDefault();
+// Submit commande (appel Supabase / Stripe)
+if (checkoutForm) {
+  checkoutForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-            if (cart.length === 0) {
-              checkoutMessage.textContent = "Ton panier est vide.";
-              return;
-            }
+    if (cart.length === 0) {
+      checkoutMessage.textContent = "Ton panier est vide.";
+      return;
+    }
 
-            const email = checkoutEmailInput.value.trim();
-            if (!email) {
-              checkoutMessage.textContent = "Merci d'entrer un email.";
-              return;
-            }
+    const email = checkoutEmailInput.value.trim();
+    if (!email) {
+      checkoutMessage.textContent = "Merci d'entrer un email.";
+      return;
+    }
 
-            // À ce stade : log dans la console
-            console.log('COMMANDE A ENVOYER :', {
-              email,
-              cart
-            });
-
-            // Vider panier + formulaire
-            cart = [];
-            renderCart();
-            checkoutForm.reset();
-
-            // Pop-up de confirmation
-            openOrderPopup();
-          });
+    try {
+      const response = await fetch(
+        "https://tuqsimojpkcodshueizo.supabase.co/functions/v1/create-checkout-session",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, cart })
         }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur serveur");
+      }
+
+      const data = await response.json();
+      // data.url = URL Stripe Checkout
+      window.location.href = data.url;
+    } catch (err) {
+      console.error(err);
+      checkoutMessage.textContent =
+        "Impossible de créer le paiement, réessaie dans quelques minutes.";
+    }
+  });
+}
+
     </script>
 </body>
 </html>
