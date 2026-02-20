@@ -200,6 +200,21 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
+.cart-btn {
+  padding: 2px 6px;
+  margin-left: 4px;
+  border-radius: 4px;
+  border: 1px solid var(--navy);
+  background-color: transparent;
+  color: var(--navy);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.cart-btn:hover {
+  background-color: var(--navy);
+  color: var(--bg-color);
+}
 
         
     </style>
@@ -469,29 +484,37 @@ function renderCart() {
 
   cart.forEach(item => {
     const li = document.createElement('li');
+    li.style.display = 'flex';
+    li.style.justifyContent = 'space-between';
+    li.style.alignItems = 'center';
+    li.style.marginBottom = '4px';
 
     const labelSpan = document.createElement('span');
     labelSpan.textContent = `${item.name} — ${item.price * item.qty} € (x${item.qty})`;
 
+    const btnWrapper = document.createElement('span');
+
     const minusBtn = document.createElement('button');
     minusBtn.textContent = '-';
-    minusBtn.style.marginLeft = '8px';
+    minusBtn.className = 'cart-btn';
     minusBtn.onclick = () => decrementCartItem(item.id);
 
     const plusBtn = document.createElement('button');
     plusBtn.textContent = '+';
-    plusBtn.style.marginLeft = '4px';
+    plusBtn.className = 'cart-btn';
     plusBtn.onclick = () => incrementCartItem(item.id);
 
     const removeBtn = document.createElement('button');
     removeBtn.textContent = 'retirer';
-    removeBtn.style.marginLeft = '4px';
+    removeBtn.className = 'cart-btn';
     removeBtn.onclick = () => removeFromCart(item.id);
 
+    btnWrapper.appendChild(minusBtn);
+    btnWrapper.appendChild(plusBtn);
+    btnWrapper.appendChild(removeBtn);
+
     li.appendChild(labelSpan);
-    li.appendChild(minusBtn);
-    li.appendChild(plusBtn);
-    li.appendChild(removeBtn);
+    li.appendChild(btnWrapper);
 
     cartList.appendChild(li);
     total += item.price * item.qty;
@@ -499,6 +522,7 @@ function renderCart() {
 
   cartTotal.innerHTML = `<strong>Total :</strong> ${total} €`;
 }
+
 
 // Gestion du submit (toujours version console)
 if (checkoutForm) {
