@@ -282,6 +282,31 @@
             color: var(--bg-color);
         }
 
+        .cart-wrapper {
+    margin-top: 30px;
+    max-width: 600px;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.cart-list {
+    list-style: disc;
+    padding-left: 20px;
+    text-align: left;
+    margin: 10px 0 15px;
+}
+
+.cart-list li {
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
     </style>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
@@ -377,28 +402,29 @@
                     </div>
                 </div>
                 
-                <div style="margin-top: 30px; text-align:left; max-width:600px; margin-inline:auto;">
-                    <h3>Mon panier</h3>
-                    <ul id="cart-list"></ul>
-                    <p id="cart-total"><strong>Total :</strong> 0 €</p>
+<div class="cart-wrapper">
+  <h3>Mon panier</h3>
+  <ul id="cart-list" class="cart-list"></ul>
+  <p id="cart-total"><strong>Total :</strong> 0 €</p>
 
-                    <h4 style="margin-top:20px;">Valider la commande</h4>
-                    <form id="checkout-form">
-                        <label for="checkout-email">Votre email :</label><br>
-                        <input type="email" id="checkout-email" name="email" required
-                               style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+  <h4 style="margin-top:20px;">Valider la commande</h4>
+  <form id="checkout-form" class="checkout-form">
+    <label for="checkout-email">Votre email :</label><br>
+    <input type="email" id="checkout-email" name="email" required
+           style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
 
-                        <label for="checkout-name">Nom complet :</label><br>
-                        <input type="text" id="checkout-name" name="full_name" required
-                               style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+    <label for="checkout-name">Nom complet :</label><br>
+    <input type="text" id="checkout-name" name="full_name" required
+           style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
 
-                        <button type="submit" class="product-cta">
-                            Valider la commande
-                        </button>
-                    </form>
+    <button type="submit" class="product-cta">
+      Valider la commande
+    </button>
+  </form>
 
-                    <p id="checkout-message" style="margin-top:10px;"></p>
-                </div>
+  <p id="checkout-message" style="margin-top:10px;"></p>
+</div>
+
             </div>
 
             <div id="contact" class="tab" style="display:none">
@@ -641,6 +667,12 @@
             cart.forEach((item) => {
               amount_cents += item.price * 100 * item.qty;
             });
+            
+            // version texte lisible du panier
+            const cartDescription = cart
+              .map((item) => `${item.name} x${item.qty} (${item.price}€)`)
+              .join(" | ");
+
 
             try {
               const { error } = await supabaseClient
@@ -650,7 +682,7 @@
                     email,
                     amount_cents,
                     currency: 'eur',
-                    cart_json: JSON.stringify(cart), // ta colonne est en text
+                    cart_json: cartDescription, // ta colonne est en text
                     status: 'pending',
                   }
                 ]);
