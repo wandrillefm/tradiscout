@@ -283,6 +283,7 @@
         }
 
     </style>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body class="no-scrollbar">
 
@@ -535,13 +536,11 @@
         const checkoutEmailInput = document.getElementById('checkout-email');
         const checkoutMessage = document.getElementById('checkout-message');
         const orderPopup = document.getElementById('order-popup');
+        // Supabase client (clé publique)
+        const supabaseUrl = "https://tuqsimojpkcodshueizo.supabase.co";
+        const supabaseAnonKey = "sb_publishable_TzeZGiGoTQgRhFJvekwf0w_D_Jf7NFA";
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-        const fullNameInput = document.getElementById('checkout-name');
-        const addressLine1Input = document.getElementById('address-line1');
-        const addressLine2Input = document.getElementById('address-line2');
-        const postalCodeInput = document.getElementById('postal-code');
-        const cityInput = document.getElementById('city');
-        const countryInput = document.getElementById('country');
 
         function openOrderPopup() {
           if (orderPopup) {
@@ -641,77 +640,63 @@
           cartTotal.innerHTML = `<strong>Total :</strong> ${total} €`;
         }
 
-        // URL de ton Apps Script Google
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwclcecPSgjNl-f_feMFjj2O3TDrZu13Wi64wrpL946NaKAVJFN_by5gAcZmPwuiqDn/exec";
+// Submit commande : enregistrement dans Supabase.orders
+if (checkoutForm) {
+  checkoutForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-        // Submit commande : envoi vers Google Sheet
-        if (checkoutForm) {
-          checkoutForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
+    if (cart.length === 0) {
+      checkoutMessage.textContent = "Ton panier est vide.";
+      return;
+    }
 
-            if (cart.length === 0) {
-              checkoutMessage.textContent = "Ton panier est vide.";
-              return;
-            }
+    const email = checkoutEmailInput.value.trim();
+    if (!email) {
+      checkoutMessage.textContent = "Merci d'entrer un email.";
+      return;
+    }
 
-            const email = checkoutEmailInput.value.trim();
-            const name = fullNameInput.value.trim();
-            const address_line1 = addressLine1Input.value.trim();
-            const address_line2 = addressLine2Input.value.trim();
-            const postal_code = postalCodeInput.value.trim();
-            const city = cityInput.value.trim();
-            const country = countryInput.value.trim();
+    // calcul du total en centimes
+    let amount_cents = 0;
+cart.forEach((item) => {
+  amount_cents += item.price * 100 * item.qty;
+});
 
-            if (!email || !name || !address_line1 || !postal_code || !city || !country) {
-              checkoutMessage.textContent = "Merci de remplir tous les champs obligatoires.";
-              return;
-            }
+const { error } = await supabaseClient
+  .from('orders')
+  .insert([
+    {
+      email,
+      amount_cents,
+      currency: 'eur',
+      cart_json: cart,
+      status: 'pending',
+    }
+  ]);
 
-            let total_eur = 0;
-            cart.forEach((item) => {
-              total_eur += item.price * item.qty;
-            });
 
-            const payload = {
-              name,
-              email,
-              address: address_line1 + (address_line2 ? (" " + address_line2) : ""),
-              postal_code,
-              city,
-              country,
-              total_eur,
-              cart,
-            };
+      if (error) {
+        console.error('Erreur Supabase insert orders:', error);
+        checkoutMessage.textContent =
+          "Impossible d'enregistrer la commande, réessaie plus tard.";
+        return;
+      }
 
-            try {
-              const response = await fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-              });
+      // vider panier + formulaire
+      cart = [];
+      renderCart();
+      checkoutForm.reset();
 
-              const data = await response.json();
-              if (!data.success) {
-                console.error("Erreur Apps Script:", data.error);
-                checkoutMessage.textContent =
-                  "Impossible d'enregistrer la commande, réessaie plus tard.";
-                return;
-              }
+      // pop-up de confirmation
+      openOrderPopup();
+    } catch (err) {
+      console.error(err);
+      checkoutMessage.textContent =
+        "Erreur inattendue, réessaie dans quelques minutes.";
+    }
+  });
+}
 
-              // vider panier + formulaire
-              cart = [];
-              renderCart();
-              checkoutForm.reset();
-
-              // pop-up
-              openOrderPopup();
-            } catch (err) {
-              console.error(err);
-              checkoutMessage.textContent =
-                "Erreur réseau, réessaie dans quelques minutes.";
-            }
-          });
-        }
     </script>
 </body>
 </html>
