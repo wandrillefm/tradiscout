@@ -386,6 +386,31 @@
                         <label for="checkout-email">Votre email :</label><br>
                         <input type="email" id="checkout-email" name="email" required
                                style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+
+                        <label for="checkout-name">Nom complet :</label><br>
+                        <input type="text" id="checkout-name" name="full_name" required
+                               style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+
+                        <label for="address-line1">Adresse :</label><br>
+                        <input type="text" id="address-line1" name="address_line1" required
+                               style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+
+                        <label for="address-line2">Complément (optionnel) :</label><br>
+                        <input type="text" id="address-line2" name="address_line2"
+                               style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+
+                        <label for="postal-code">Code postal :</label><br>
+                        <input type="text" id="postal-code" name="postal_code" required
+                               style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+
+                        <label for="city">Ville :</label><br>
+                        <input type="text" id="city" name="city" required
+                               style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+
+                        <label for="country">Pays :</label><br>
+                        <input type="text" id="country" name="country" required
+                               style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+
                         <button type="submit" class="product-cta">
                             Valider la commande
                         </button>
@@ -511,6 +536,13 @@
         const checkoutMessage = document.getElementById('checkout-message');
         const orderPopup = document.getElementById('order-popup');
 
+        const fullNameInput = document.getElementById('checkout-name');
+        const addressLine1Input = document.getElementById('address-line1');
+        const addressLine2Input = document.getElementById('address-line2');
+        const postalCodeInput = document.getElementById('postal-code');
+        const cityInput = document.getElementById('city');
+        const countryInput = document.getElementById('country');
+
         function openOrderPopup() {
           if (orderPopup) {
             orderPopup.style.display = 'flex';
@@ -609,47 +641,77 @@
           cartTotal.innerHTML = `<strong>Total :</strong> ${total} €`;
         }
 
-// Submit commande (appel Supabase / Stripe)
-if (checkoutForm) {
-  checkoutForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
+        // URL de ton Apps Script Google
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwclcecPSgjNl-f_feMFjj2O3TDrZu13Wi64wrpL946NaKAVJFN_by5gAcZmPwuiqDn/exec";
 
-    if (cart.length === 0) {
-      checkoutMessage.textContent = "Ton panier est vide.";
-      return;
-    }
+        // Submit commande : envoi vers Google Sheet
+        if (checkoutForm) {
+          checkoutForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
 
-    const email = checkoutEmailInput.value.trim();
-    if (!email) {
-      checkoutMessage.textContent = "Merci d'entrer un email.";
-      return;
-    }
+            if (cart.length === 0) {
+              checkoutMessage.textContent = "Ton panier est vide.";
+              return;
+            }
 
-    try {
-      const response = await fetch(
-        "https://tuqsimojpkcodshueizo.supabase.co/functions/v1/create-checkout-session",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, cart })
+            const email = checkoutEmailInput.value.trim();
+            const name = fullNameInput.value.trim();
+            const address_line1 = addressLine1Input.value.trim();
+            const address_line2 = addressLine2Input.value.trim();
+            const postal_code = postalCodeInput.value.trim();
+            const city = cityInput.value.trim();
+            const country = countryInput.value.trim();
+
+            if (!email || !name || !address_line1 || !postal_code || !city || !country) {
+              checkoutMessage.textContent = "Merci de remplir tous les champs obligatoires.";
+              return;
+            }
+
+            let total_eur = 0;
+            cart.forEach((item) => {
+              total_eur += item.price * item.qty;
+            });
+
+            const payload = {
+              name,
+              email,
+              address: address_line1 + (address_line2 ? (" " + address_line2) : ""),
+              postal_code,
+              city,
+              country,
+              total_eur,
+              cart,
+            };
+
+            try {
+              const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+              });
+
+              const data = await response.json();
+              if (!data.success) {
+                console.error("Erreur Apps Script:", data.error);
+                checkoutMessage.textContent =
+                  "Impossible d'enregistrer la commande, réessaie plus tard.";
+                return;
+              }
+
+              // vider panier + formulaire
+              cart = [];
+              renderCart();
+              checkoutForm.reset();
+
+              // pop-up
+              openOrderPopup();
+            } catch (err) {
+              console.error(err);
+              checkoutMessage.textContent =
+                "Erreur réseau, réessaie dans quelques minutes.";
+            }
+          });
         }
-      );
-
-      if (!response.ok) {
-        throw new Error("Erreur serveur");
-      }
-
-      const data = await response.json();
-      // data.url = URL Stripe Checkout
-      window.location.href = data.url;
-    } catch (err) {
-      console.error(err);
-      checkoutMessage.textContent =
-        "Impossible de créer le paiement, réessaie dans quelques minutes.";
-    }
-  });
-}
-
     </script>
 </body>
 </html>
