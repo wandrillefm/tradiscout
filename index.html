@@ -333,7 +333,9 @@
         textarea {
             width: 100%;
             padding: 8px;
-            resize: vertical;
+            resize: none;      /* taille fixe */
+            height: 90px;      /* fixe */
+            overflow: auto;    /* scroll si trop de texte */
         }
 
         /* Sémaphore canvas */
@@ -478,7 +480,7 @@
 
                 <!-- Sémaphore -->
                 <div id="code-semaphore" class="code-tab" style="display:block">
-                    <p>Fais tourner les bras du sémaphore (clique/glisse) pour voir la lettre correspondante.</p>
+                    <p>Fais tourner les bras du sémaphore (clic/glisser) pour voir la lettre correspondante.</p>
                     <div class="semaphore-wrapper">
                         <canvas id="semaphore-canvas" width="260" height="260"></canvas>
                         <p>Lettre détectée : <span id="semaphore-letter">?</span></p>
@@ -488,9 +490,10 @@
 
                 <!-- Morse -->
                 <div id="code-morse" class="code-tab">
-                    <p>Traduction en direct texte ↔ Morse (utilise “/” pour séparer les mots en Morse).</p>
-                    <textarea id="morse-input" rows="3" placeholder="Texte clair (A–Z, chiffres)"></textarea>
-                    <textarea id="morse-output" rows="3" placeholder=".‑‑. .‑.. ..‑ ..."></textarea>
+                    <p>Une seule zone : écris du texte OU du Morse (. - /). La traduction s'affiche en dessous.</p>
+                    <textarea id="morse-io" rows="3" placeholder="Texte ou Morse (. - /)"></textarea>
+                    <p>Traduction :</p>
+                    <div id="morse-result" style="min-height:40px; font-weight:600;"></div>
                 </div>
 
                 <!-- César -->
@@ -725,7 +728,7 @@
           });
         }
 
-        /* --- CODE MORSE : live --- */
+        /* --- CODE MORSE : auto-détection + live --- */
         const morseMap = {
           'A': '.-',   'B': '-...', 'C': '-.-.', 'D': '-..',  'E': '.',
           'F': '..-.', 'G': '--.',  'H': '....', 'I': '..',   'J': '.---',
@@ -740,36 +743,46 @@
           Object.entries(morseMap).map(([k,v]) => [v,k])
         );
 
-        const morseInput = document.getElementById('morse-input');
-        const morseOutput = document.getElementById('morse-output');
+        const morseIO = document.getElementById('morse-io');
+        const morseResult = document.getElementById('morse-result');
 
-        function textToMorseLive() {
-          const txt = morseInput.value.toUpperCase();
-          const result = txt.split('').map(ch => {
+        function looksLikeMorse(str) {
+          // Morse = uniquement . - / et espaces
+          return /^[.\-\/\s]+$/.test(str.trim());
+        }
+
+        // texte -> morse (avec / pour les espaces entre mots)
+        function textToMorse(str) {
+          const upper = str.toUpperCase();
+          return upper.split('').map(ch => {
             if (ch === ' ') return '/';
             return morseMap[ch] || '';
-          }).join(' ');
-          morseOutput.value = result.trim();
-        }
-        function morseToTextLive() {
-          const code = morseOutput.value.trim();
-          if (!code) {
-            morseInput.value = '';
-            return;
-          }
-          const words = code.split(' / ');
-          const decoded = words.map(w =>
-            w.split(' ').map(sym => inverseMorse[sym] || '').join('')
-          ).join(' ');
-          morseInput.value = decoded;
+          }).join(' ').replace(/\s+/g, ' ').trim();
         }
 
-        morseInput && morseInput.addEventListener('input', () => {
-          textToMorseLive();
-        });
-        morseOutput && morseOutput.addEventListener('input', () => {
-          morseToTextLive();
-        });
+        // morse -> texte (lettres séparées par espace, mots par /)
+        function morseToText(str) {
+          if (!str.trim()) return '';
+          const words = str.trim().split('/');
+          return words.map(w =>
+            w.trim().split(' ').map(sym => inverseMorse[sym] || '').join('')
+          ).join(' ');
+        }
+
+        if (morseIO && morseResult) {
+          morseIO.addEventListener('input', () => {
+            const value = morseIO.value;
+            if (!value.trim()) {
+              morseResult.textContent = '';
+              return;
+            }
+            if (looksLikeMorse(value)) {
+              morseResult.textContent = morseToText(value);
+            } else {
+              morseResult.textContent = textToMorse(value);
+            }
+          });
+        }
 
         /* --- CODE CÉSAR : live --- */
         function caesar(str, shift) {
@@ -821,7 +834,7 @@
 
         /* --- SÉMAPHORE CANVAS --- */
         const canvas = document.getElementById('semaphore-canvas');
-        const letterSpan = document.getElementById('semaphore-letter');
+        const semaphoreLetterSpan = document.getElementById('semaphore-letter');
         let draggingArm = null; // 'left' ou 'right'
         const armAngles = { left: 45, right: 315 }; // angles initiaux
 
@@ -920,7 +933,7 @@
           const aL = snapAngle(armAngles.left);
           const aR = snapAngle(armAngles.right);
           const key = `${aL}-${aR}`;
-          letterSpan.textContent = semaphoreMap[key] || '?';
+          semaphoreLetterSpan.textContent = semaphoreMap[key] || '?';
         }
 
         if (canvas) {
@@ -929,7 +942,6 @@
 
           canvas.addEventListener('mousedown', (evt) => {
             const clickAngle = angleFromCenterCanvas(evt);
-            // on choisit le bras le plus proche du clic
             const diffLeft = Math.abs(clickAngle - armAngles.left);
             const diffRight = Math.abs(clickAngle - armAngles.right);
             draggingArm = diffLeft < diffRight ? 'left' : 'right';
