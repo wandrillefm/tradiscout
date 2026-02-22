@@ -303,6 +303,48 @@
             flex-direction: column;
             align-items: center;
         }
+
+        /* Sous-onglets pour "code" */
+        .code-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .code-nav button {
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--navy);
+            background: transparent;
+            color: var(--navy);
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .code-nav button.active {
+            background: var(--navy);
+            color: var(--bg-color);
+        }
+        .code-tab {
+            display: none;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 8px;
+            resize: vertical;
+        }
+
+        /* Sémaphore canvas */
+        .semaphore-wrapper {
+            margin-top: 20px;
+        }
+        #semaphore-canvas {
+            border-radius: 50%;
+            border: 2px solid var(--navy);
+            background: rgba(226, 229, 179, 0.6);
+        }
     </style>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
@@ -328,11 +370,13 @@
         </nav>
 
         <main class="content">
+            <!-- HOME -->
             <div id="home" class="tab">
                 <p>Depuis début 2025, nous aidons les jeunes à vivre leur foi tous les jours, par le scoutisme.
                     Ce qui n’était au départ qu’un simple compte insta de rigolade, est devenue une véritable communauté animée par une équipe de 7 jeunes, offrant à tous des débats, du contenu, et des nouvelles sur le scoutisme et la chrétienté à travers l’Europe et plus particulièrement en France.</p>
             </div>
 
+            <!-- REJOINDRE -->
             <div id="rejoindre" class="tab" style="display:none">
                 <div class="grid-social">
                     <a href="https://instagram.com/tradiscout" class="card-social"><small>Instagram</small><span>4200+ personnes</span></a>
@@ -344,6 +388,7 @@
                 </div>
             </div>
 
+            <!-- BOUTIQUE -->
             <div id="boutique" class="tab" style="display:none; padding-bottom:70px;">
                 <div>
                     <p>Sweats et tshirts Tradiscout pour porter la flamme scout au quotidien!</p>
@@ -421,25 +466,45 @@
                 </div>
             </div>
 
+            <!-- CODE (3 sous-onglets) -->
             <div id="code" class="tab" style="display:none">
                 <p>Découvre les bases des codes utilisés au camp et en patrouille :</p>
-            
-                <div class="grid-social">
-                    <a href="semaphore.html" class="card-social">
-                        <small>Code</small>
-                        <span>Sémaphore</span>
-                    </a>
-                    <a href="morse.html" class="card-social">
-                        <small>Code</small>
-                        <span>Morse</span>
-                    </a>
-                    <a href="caesar.html" class="card-social">
-                        <small>Code</small>
-                        <span>Code César</span>
-                    </a>
+
+                <div class="code-nav">
+                    <button onclick="showCodeTab('code-semaphore', this)" class="active">Sémaphore</button>
+                    <button onclick="showCodeTab('code-morse', this)">Morse</button>
+                    <button onclick="showCodeTab('code-caesar', this)">César</button>
+                </div>
+
+                <!-- Sémaphore -->
+                <div id="code-semaphore" class="code-tab" style="display:block">
+                    <p>Fais tourner les bras du sémaphore (clique/glisse) pour voir la lettre correspondante.</p>
+                    <div class="semaphore-wrapper">
+                        <canvas id="semaphore-canvas" width="260" height="260"></canvas>
+                        <p>Lettre détectée : <span id="semaphore-letter">?</span></p>
+                    </div>
+                    <p style="font-size:0.85rem;margin-top:8px;">(Mapping d'exemple, à compléter avec l'alphabet complet.)</p>
+                </div>
+
+                <!-- Morse -->
+                <div id="code-morse" class="code-tab">
+                    <p>Traduction en direct texte ↔ Morse (utilise “/” pour séparer les mots en Morse).</p>
+                    <textarea id="morse-input" rows="3" placeholder="Texte clair (A–Z, chiffres)"></textarea>
+                    <textarea id="morse-output" rows="3" placeholder=".‑‑. .‑.. ..‑ ..."></textarea>
+                </div>
+
+                <!-- César -->
+                <div id="code-caesar" class="code-tab">
+                    <p>Code César en direct : choisis un décalage et écris ton texte.</p>
+                    <label>Décalage :
+                        <input type="number" id="shift" value="3" min="0" max="25" style="width:60px; padding:4px;">
+                    </label>
+                    <textarea id="caesar-input" rows="3" placeholder="Texte clair"></textarea>
+                    <textarea id="caesar-output" rows="3" placeholder="Texte chiffré"></textarea>
                 </div>
             </div>
 
+            <!-- CONTACT -->
             <div id="contact" class="tab" style="display:none">
                 <p>Vous souhaitez nous envoyer une photo, une idée de mèmes, une suggestion ou nous signaler un problème?</p>
                 <a href="mailto:tradiscout@gmail.com" class="mail-link">Envoyez nous un mail!</a>
@@ -451,6 +516,7 @@
         </footer>
     </div>
 
+    <!-- Pop-up commande -->
     <div id="order-popup" style="
       position: fixed;
       inset: 0;
@@ -480,10 +546,10 @@
     </div>
 
     <script>
+        /* Loader */
         const text = "TRADISCOUT";
         const target = document.getElementById('typewriter');
         let i = 0;
-
         function type() {
             if (i < text.length) {
                 target.innerText += text.charAt(i);
@@ -500,9 +566,9 @@
                 }, 800);
             }
         }
-
         window.addEventListener('load', () => { setTimeout(type, 500); });
 
+        /* Navigation principale */
         function show(id) {
             document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
             document.getElementById(id).style.display = 'block';
@@ -512,40 +578,26 @@
             else if (id === 'code') logo.innerText = "codes scouts";
             else if (id === 'contact') logo.innerText = "contact";
             else logo.innerText = "TRADISCOUT";
-
             window.scrollTo(0,0);
         }
 
+        /* Sous-onglets code */
+        function showCodeTab(id, btn) {
+            document.querySelectorAll('.code-tab').forEach(t => t.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+            document.querySelectorAll('.code-nav button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        /* Boutique / Supabase */
         const products = {
-          tshirt_valto: {
-            id: 'tshirt_valto',
-            name: "T‑shirt Verso l'Alto",
-            price: 18
-          },
-          tshirt_tradiscout: {
-            id: 'tshirt_tradiscout',
-            name: "T‑shirt Tradiscout",
-            price: 18
-          },
-          tshirt_ora: {
-            id: 'tshirt_ora',
-            name: "T‑shirt “Ora et Labora”",
-            price: 18
-          },
-          sweat_valto: {
-            id: 'sweat_valto',
-            name: "Sweat Verso l'Alto",
-            price: 29
-          },
-          sweat_tradiscout: {
-            id: 'sweat_tradiscout',
-            name: "Sweat Tradiscout",
-            price: 29
-          }
+          tshirt_valto: { id: 'tshirt_valto', name: "T‑shirt Verso l'Alto", price: 18 },
+          tshirt_tradiscout: { id: 'tshirt_tradiscout', name: "T‑shirt Tradiscout", price: 18 },
+          tshirt_ora: { id: 'tshirt_ora', name: "T‑shirt “Ora et Labora”", price: 18 },
+          sweat_valto: { id: 'sweat_valto', name: "Sweat Verso l'Alto", price: 29 },
+          sweat_tradiscout: { id: 'sweat_tradiscout', name: "Sweat Tradiscout", price: 29 }
         };
-
         let cart = [];
-
         const cartList = document.getElementById('cart-list');
         const cartTotal = document.getElementById('cart-total');
         const checkoutForm = document.getElementById('checkout-form');
@@ -558,29 +610,19 @@
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
         function openOrderPopup() {
-          if (orderPopup) {
-            orderPopup.style.display = 'flex';
-          }
+          if (orderPopup) orderPopup.style.display = 'flex';
         }
-
         function closeOrderPopup() {
-          if (orderPopup) {
-            orderPopup.style.display = 'none';
-          }
+          if (orderPopup) orderPopup.style.display = 'none';
         }
 
         function addToCart(productId, buttonEl) {
           const product = products[productId];
           if (!product) return;
-
           const existing = cart.find(item => item.id === productId);
-          if (existing) {
-            existing.qty += 1;
-          } else {
-            cart.push({ ...product, qty: 1 });
-          }
+          if (existing) existing.qty += 1;
+          else cart.push({ ...product, qty: 1 });
           renderCart();
-
           if (buttonEl) {
             const originalText = buttonEl.textContent;
             buttonEl.textContent = "bien ajouté !";
@@ -591,89 +633,68 @@
             }, 1200);
           }
         }
-
         function decrementCartItem(productId) {
           const idx = cart.findIndex(item => item.id === productId);
           if (idx === -1) return;
-
           cart[idx].qty -= 1;
-          if (cart[idx].qty <= 0) {
-            cart.splice(idx, 1);
-          }
+          if (cart[idx].qty <= 0) cart.splice(idx, 1);
           renderCart();
         }
-
         function incrementCartItem(productId) {
           const item = cart.find(i => i.id === productId);
           if (!item) return;
           item.qty += 1;
           renderCart();
         }
-
         function renderCart() {
           cartList.innerHTML = '';
-
           let total = 0;
-
           cart.forEach(item => {
             const li = document.createElement('li');
             li.style.display = 'flex';
             li.style.justifyContent = 'space-between';
             li.style.alignItems = 'center';
             li.style.marginBottom = '4px';
-
             const labelSpan = document.createElement('span');
             labelSpan.textContent = `${item.name} — ${item.price * item.qty} € (x${item.qty})`;
-
             const btnWrapper = document.createElement('span');
-
             const minusBtn = document.createElement('button');
             minusBtn.textContent = '-';
             minusBtn.className = 'cart-btn';
             minusBtn.onclick = () => decrementCartItem(item.id);
-
             const plusBtn = document.createElement('button');
             plusBtn.textContent = '+';
             plusBtn.className = 'cart-btn';
             plusBtn.onclick = () => incrementCartItem(item.id);
-
             btnWrapper.appendChild(minusBtn);
             btnWrapper.appendChild(plusBtn);
-
             li.appendChild(labelSpan);
             li.appendChild(btnWrapper);
-
             cartList.appendChild(li);
             total += item.price * item.qty;
           });
-
           cartTotal.innerHTML = `<strong>Total :</strong> ${total} €`;
         }
 
         if (checkoutForm) {
           checkoutForm.addEventListener('submit', async (event) => {
             event.preventDefault();
-
             if (cart.length === 0) {
               checkoutMessage.textContent = "Votre panier est vide.";
               return;
             }
-
             const email = checkoutEmailInput.value.trim();
             if (!email) {
               checkoutMessage.textContent = "Merci d'entrer un email.";
               return;
             }
-
             let amount_cents = 0;
             cart.forEach((item) => {
               amount_cents += item.price * 100 * item.qty;
             });
-            
             const cartDescription = cart
               .map((item) => `${item.name} x${item.qty} (${item.price}€)`)
               .join(" | ");
-
             try {
               const { error } = await supabaseClient
                 .from('orders')
@@ -686,14 +707,12 @@
                     status: 'pending',
                   }
                 ]);
-
               if (error) {
                 console.error('Erreur Supabase insert orders:', error);
                 checkoutMessage.textContent =
                   "Impossible d'enregistrer la commande, réessaie plus tard.";
                 return;
               }
-
               cart = [];
               renderCart();
               checkoutForm.reset();
@@ -705,7 +724,231 @@
             }
           });
         }
+
+        /* --- CODE MORSE : live --- */
+        const morseMap = {
+          'A': '.-',   'B': '-...', 'C': '-.-.', 'D': '-..',  'E': '.',
+          'F': '..-.', 'G': '--.',  'H': '....', 'I': '..',   'J': '.---',
+          'K': '-.-',  'L': '.-..', 'M': '--',   'N': '-.',   'O': '---',
+          'P': '.--.', 'Q': '--.-', 'R': '.-.',  'S': '...',  'T': '-',
+          'U': '..-',  'V': '...-', 'W': '.--',  'X': '-..-', 'Y': '-.--',
+          'Z': '--..',
+          '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-',
+          '5':'.....','6':'-....','7':'--...','8':'---..','9':'----.'
+        };
+        const inverseMorse = Object.fromEntries(
+          Object.entries(morseMap).map(([k,v]) => [v,k])
+        );
+
+        const morseInput = document.getElementById('morse-input');
+        const morseOutput = document.getElementById('morse-output');
+
+        function textToMorseLive() {
+          const txt = morseInput.value.toUpperCase();
+          const result = txt.split('').map(ch => {
+            if (ch === ' ') return '/';
+            return morseMap[ch] || '';
+          }).join(' ');
+          morseOutput.value = result.trim();
+        }
+        function morseToTextLive() {
+          const code = morseOutput.value.trim();
+          if (!code) {
+            morseInput.value = '';
+            return;
+          }
+          const words = code.split(' / ');
+          const decoded = words.map(w =>
+            w.split(' ').map(sym => inverseMorse[sym] || '').join('')
+          ).join(' ');
+          morseInput.value = decoded;
+        }
+
+        morseInput && morseInput.addEventListener('input', () => {
+          textToMorseLive();
+        });
+        morseOutput && morseOutput.addEventListener('input', () => {
+          morseToTextLive();
+        });
+
+        /* --- CODE CÉSAR : live --- */
+        function caesar(str, shift) {
+          const A = 'A'.charCodeAt(0);
+          const Z = 'Z'.charCodeAt(0);
+          const a = 'a'.charCodeAt(0);
+          const z = 'z'.charCodeAt(0);
+          return str.split('').map(ch => {
+            const code = ch.charCodeAt(0);
+            if (code >= A && code <= Z) {
+              const pos = code - A;
+              return String.fromCharCode(((pos + shift + 26) % 26) + A);
+            }
+            if (code >= a && code <= z) {
+              const pos = code - a;
+              return String.fromCharCode(((pos + shift + 26) % 26) + a);
+            }
+            return ch;
+          }).join('');
+        }
+        const caesarInput = document.getElementById('caesar-input');
+        const caesarOutput = document.getElementById('caesar-output');
+        const shiftInput = document.getElementById('shift');
+
+        function updateCaesarFromPlain() {
+          const k = parseInt(shiftInput.value || '0', 10);
+          caesarOutput.value = caesar(caesarInput.value, k);
+        }
+        function updateCaesarFromCipher() {
+          const k = parseInt(shiftInput.value || '0', 10);
+          caesarInput.value = caesar(caesarOutput.value, -k);
+        }
+
+        if (caesarInput) {
+          caesarInput.addEventListener('input', updateCaesarFromPlain);
+        }
+        if (caesarOutput) {
+          caesarOutput.addEventListener('input', updateCaesarFromCipher);
+        }
+        if (shiftInput) {
+          shiftInput.addEventListener('input', () => {
+            if (document.activeElement === caesarInput) {
+              updateCaesarFromPlain();
+            } else {
+              updateCaesarFromCipher();
+            }
+          });
+        }
+
+        /* --- SÉMAPHORE CANVAS --- */
+        const canvas = document.getElementById('semaphore-canvas');
+        const letterSpan = document.getElementById('semaphore-letter');
+        let draggingArm = null; // 'left' ou 'right'
+        const armAngles = { left: 45, right: 315 }; // angles initiaux
+
+        // Mapping d'exemple (à compléter)
+        const semaphoreMap = {
+          '45-315': 'A',
+          '90-270': 'B',
+          '135-225': 'C',
+          '180-180': 'D',
+          '225-135': 'E',
+          '270-90': 'F',
+          '315-45': 'G'
+        };
+
+        function drawSemaphore() {
+          if (!canvas) return;
+          const ctx = canvas.getContext('2d');
+          const w = canvas.width;
+          const h = canvas.height;
+          const cx = w / 2;
+          const cy = h / 2;
+          ctx.clearRect(0, 0, w, h);
+
+          // cercle
+          ctx.strokeStyle = '#0a1d37';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(cx, cy, w/2 - 4, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // corps
+          ctx.strokeStyle = '#0a1d37';
+          ctx.lineWidth = 6;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy - 20);
+          ctx.lineTo(cx, cy + 40);
+          ctx.stroke();
+
+          // tête
+          ctx.beginPath();
+          ctx.arc(cx, cy - 30, 8, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // bras
+          function drawArm(angleDeg, color) {
+            const rad = angleDeg * Math.PI / 180;
+            const length = 80;
+            const x2 = cx + Math.cos(rad) * length;
+            const y2 = cy + Math.sin(rad) * length;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            // petit drapeau en bout
+            ctx.fillStyle = color;
+            const flagLen = 20;
+            const ortho = rad + Math.PI / 2;
+            const fx1 = x2;
+            const fy1 = y2;
+            const fx2 = x2 + Math.cos(ortho) * flagLen;
+            const fy2 = y2 + Math.sin(ortho) * flagLen;
+            const fx3 = x2 + Math.cos(rad) * flagLen * 0.6;
+            const fy3 = y2 + Math.sin(rad) * flagLen * 0.6;
+            ctx.beginPath();
+            ctx.moveTo(fx1, fy1);
+            ctx.lineTo(fx2, fy2);
+            ctx.lineTo(fx3, fy3);
+            ctx.closePath();
+            ctx.fill();
+          }
+
+          drawArm(armAngles.left, '#b30000');
+          drawArm(armAngles.right, '#b30000');
+        }
+
+        function snapAngle(deg) {
+          const step = 45;
+          return Math.round(deg / step) * step;
+        }
+
+        function angleFromCenterCanvas(evt) {
+          const rect = canvas.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = evt.clientX - cx;
+          const dy = evt.clientY - cy;
+          let deg = Math.atan2(dy, dx) * 180 / Math.PI;
+          if (deg < 0) deg += 360;
+          return deg;
+        }
+
+        function updateSemaphoreLetter() {
+          const aL = snapAngle(armAngles.left);
+          const aR = snapAngle(armAngles.right);
+          const key = `${aL}-${aR}`;
+          letterSpan.textContent = semaphoreMap[key] || '?';
+        }
+
+        if (canvas) {
+          drawSemaphore();
+          updateSemaphoreLetter();
+
+          canvas.addEventListener('mousedown', (evt) => {
+            const clickAngle = angleFromCenterCanvas(evt);
+            // on choisit le bras le plus proche du clic
+            const diffLeft = Math.abs(clickAngle - armAngles.left);
+            const diffRight = Math.abs(clickAngle - armAngles.right);
+            draggingArm = diffLeft < diffRight ? 'left' : 'right';
+          });
+
+          window.addEventListener('mousemove', (evt) => {
+            if (!draggingArm) return;
+            const deg = angleFromCenterCanvas(evt);
+            const snapped = snapAngle(deg);
+            armAngles[draggingArm] = snapped;
+            drawSemaphore();
+            updateSemaphoreLetter();
+          });
+
+          window.addEventListener('mouseup', () => {
+            if (!draggingArm) return;
+            draggingArm = null;
+          });
+        }
     </script>
 </body>
 </html>
-
