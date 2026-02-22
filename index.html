@@ -328,6 +328,7 @@
             <a onclick="show('home')">accueil</a>
             <a onclick="show('rejoindre')">rejoindre</a>
             <a onclick="show('boutique')">boutique</a>
+            <a onclick="show('code')">code</a>
             <a onclick="show('contact')">contact</a>
         </nav>
 
@@ -403,29 +404,47 @@
                     </div>
                 </div>
                 
-<div class="cart-wrapper">
-  <h3>Mon panier</h3>
-  <ul id="cart-list" class="cart-list"></ul>
-  <p id="cart-total"><strong>Total :</strong> 0 €</p>
+                <div class="cart-wrapper">
+                  <h3>Mon panier</h3>
+                  <ul id="cart-list" class="cart-list"></ul>
+                  <p id="cart-total"><strong>Total :</strong> 0 €</p>
+                
+                  <h4 style="margin-top:20px;">Valider la commande</h4>
+                  <form id="checkout-form" class="checkout-form">
+                    <label for="checkout-email">Votre email :</label><br>
+                    <input type="email" id="checkout-email" name="email" required
+                           style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+                
+                    <label for="checkout-name">Nom complet :</label><br>
+                    <input type="text" id="checkout-name" name="full_name" required
+                           style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
+                
+                    <button type="submit" class="product-cta">
+                      Valider la commande
+                    </button>
+                  </form>
+                
+                  <p id="checkout-message" style="margin-top:10px;"></p>
+                </div>
+            </div>
 
-  <h4 style="margin-top:20px;">Valider la commande</h4>
-  <form id="checkout-form" class="checkout-form">
-    <label for="checkout-email">Votre email :</label><br>
-    <input type="email" id="checkout-email" name="email" required
-           style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
-
-    <label for="checkout-name">Nom complet :</label><br>
-    <input type="text" id="checkout-name" name="full_name" required
-           style="padding:5px; margin:8px 0; width:100%; max-width:300px;"><br>
-
-    <button type="submit" class="product-cta">
-      Valider la commande
-    </button>
-  </form>
-
-  <p id="checkout-message" style="margin-top:10px;"></p>
-</div>
-
+            <div id="code" class="tab" style="display:none">
+                <p>Découvre les bases des codes utilisés au camp et en patrouille :</p>
+            
+                <div class="grid-social">
+                    <a href="semaphore.html" class="card-social">
+                        <small>Code</small>
+                        <span>Sémaphore</span>
+                    </a>
+                    <a href="morse.html" class="card-social">
+                        <small>Code</small>
+                        <span>Morse</span>
+                    </a>
+                    <a href="caesar.html" class="card-social">
+                        <small>Code</small>
+                        <span>Code César</span>
+                    </a>
+                </div>
             </div>
 
             <div id="contact" class="tab" style="display:none">
@@ -498,6 +517,7 @@
             const logo = document.getElementById('main-logo');
             if (id === 'rejoindre') logo.innerText = "rejoins-nous!";
             else if (id === 'boutique') logo.innerText = "boutique";
+            else if (id === 'code') logo.innerText = "codes scouts";
             else if (id === 'contact') logo.innerText = "contact";
             else logo.innerText = "TRADISCOUT";
 
