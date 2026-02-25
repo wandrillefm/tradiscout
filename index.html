@@ -186,11 +186,11 @@
             }
             .main-nav { 
                 position: fixed;
-                bottom: 45px; left: 0;
+                bottom: 32px; left: 0;
                 width: 100%; 
                 background-color: var(--bg-color);
                 padding: 10px 0;
-                gap: 40px;
+                gap: 17px;
                 padding-top: 30px;
             }
             footer {
@@ -236,7 +236,6 @@
             margin-bottom: 8px;
         }
         .product-price {
-            font-family: 'Uncial Antiqua', cursive;
             font-weight: 700;
             margin-bottom: 8px;
         }
@@ -333,21 +332,24 @@
         textarea {
             width: 100%;
             padding: 8px;
-            resize: none;      /* taille fixe */
-            height: 90px;      /* fixe */
-            overflow: auto;    /* scroll si trop de texte */
+            resize: none;
+            height: 90px;
+            overflow: auto;
         }
 
         /* Sémaphore canvas */
         .semaphore-wrapper {
             margin-top: 20px;
+            margin-bottom: 90px;
         }
-        #semaphore-canvas {
-            border-radius: 50%;
+        #semaphore-canvas,
+        #semaphore-encode-canvas {
+            border-radius: 2px;
             border: 2px solid var(--navy);
-            background: rgba(226, 229, 179, 0.6);
+            background: rgba(255, 255, 255, 0.6);
         }
     </style>
+
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body class="no-scrollbar">
@@ -470,7 +472,6 @@
 
             <!-- CODE (3 sous-onglets) -->
             <div id="code" class="tab" style="display:none">
-                <p>Découvre les bases des codes utilisés au camp et en patrouille :</p>
 
                 <div class="code-nav">
                     <button onclick="showCodeTab('code-semaphore', this)" class="active">Sémaphore</button>
@@ -478,32 +479,31 @@
                     <button onclick="showCodeTab('code-caesar', this)">César</button>
                 </div>
 
-                <!-- Sémaphore -->
+                <!-- SÉMAPHORE (version translator) -->
                 <div id="code-semaphore" class="code-tab" style="display:block">
-                    <p>Fais tourner les bras du sémaphore (clic/glisser) pour voir la lettre correspondante.</p>
+                    <p>Fais tourner les bras du sémaphore pour voir la lettre correspondante.</p>
                     <div class="semaphore-wrapper">
                         <canvas id="semaphore-canvas" width="260" height="260"></canvas>
                         <p>Lettre détectée : <span id="semaphore-letter">?</span></p>
                     </div>
-                    <p style="font-size:0.85rem;margin-top:8px;">(Mapping d'exemple, à compléter avec l'alphabet complet.)</p>
+                <img src="alphabet-semaphore.jpg" alt="Description">
                 </div>
 
-                <!-- Morse -->
+                <!-- Morse (input en haut, auto-détection, résultat en bas) -->
                 <div id="code-morse" class="code-tab">
-                    <p>Une seule zone : écris du texte OU du Morse (. - /). La traduction s'affiche en dessous.</p>
-                    <textarea id="morse-io" rows="3" placeholder="Texte ou Morse (. - /)"></textarea>
-                    <p>Traduction :</p>
-                    <div id="morse-result" style="min-height:40px; font-weight:600;"></div>
+                    <p>Écris du texte ou du morse dans la zone du haut, le résultat apparaît en dessous.</p>
+                    <textarea id="morse-input" rows="3" placeholder="Texte ou Morse"></textarea>
+                    <textarea id="morse-output" rows="3" placeholder="Résultat" readonly></textarea>
                 </div>
 
-                <!-- César -->
+                <!-- César : haut = saisie, bas = résultat -->
                 <div id="code-caesar" class="code-tab">
-                    <p>Code César en direct : choisis un décalage et écris ton texte.</p>
+                    <p>Choisis un décalage et écris ton texte.</p>
                     <label>Décalage :
-                        <input type="number" id="shift" value="3" min="0" max="25" style="width:60px; padding:4px;">
+                        <input type="number" id="shift" value="3" min="0" max="25" style="width:60px; padding:4px; margin:10px;">
                     </label>
                     <textarea id="caesar-input" rows="3" placeholder="Texte clair"></textarea>
-                    <textarea id="caesar-output" rows="3" placeholder="Texte chiffré"></textarea>
+                    <textarea id="caesar-output" rows="3" placeholder="Texte chiffré" readonly></textarea>
                 </div>
             </div>
 
@@ -578,7 +578,7 @@
             const logo = document.getElementById('main-logo');
             if (id === 'rejoindre') logo.innerText = "rejoins-nous!";
             else if (id === 'boutique') logo.innerText = "boutique";
-            else if (id === 'code') logo.innerText = "codes scouts";
+            else if (id === 'code') logo.innerText = "codes";
             else if (id === 'contact') logo.innerText = "contact";
             else logo.innerText = "TRADISCOUT";
             window.scrollTo(0,0);
@@ -592,7 +592,7 @@
             btn.classList.add('active');
         }
 
-        /* Boutique / Supabase */
+        /* Boutique / Supabase (inchangé) */
         const products = {
           tshirt_valto: { id: 'tshirt_valto', name: "T‑shirt Verso l'Alto", price: 18 },
           tshirt_tradiscout: { id: 'tshirt_tradiscout', name: "T‑shirt Tradiscout", price: 18 },
@@ -728,7 +728,7 @@
           });
         }
 
-        /* --- CODE MORSE : auto-détection + live --- */
+        /* --- MORSE : input en haut, résultat en bas, auto-détection + format // --- */
         const morseMap = {
           'A': '.-',   'B': '-...', 'C': '-.-.', 'D': '-..',  'E': '.',
           'F': '..-.', 'G': '--.',  'H': '....', 'I': '..',   'J': '.---',
@@ -743,48 +743,60 @@
           Object.entries(morseMap).map(([k,v]) => [v,k])
         );
 
-        const morseIO = document.getElementById('morse-io');
-        const morseResult = document.getElementById('morse-result');
+        const morseInput = document.getElementById('morse-input');
+        const morseOutput = document.getElementById('morse-output');
 
         function looksLikeMorse(str) {
-          // Morse = uniquement . - / et espaces
           return /^[.\-\/\s]+$/.test(str.trim());
         }
 
-        // texte -> morse (avec / pour les espaces entre mots)
-        function textToMorse(str) {
-          const upper = str.toUpperCase();
-          return upper.split('').map(ch => {
-            if (ch === ' ') return '/';
-            return morseMap[ch] || '';
-          }).join(' ').replace(/\s+/g, ' ').trim();
+        function textToMorseCustom(str) {
+          const upper = str.toUpperCase().replace(/[^A-Z0-9 ]/g, '');
+          const words = upper.split(/\s+/).filter(Boolean);
+          const encodedWords = words.map(word => {
+            const letters = word.split('');
+            const encLetters = letters.map(ch => {
+              const code = morseMap[ch];
+              return code ? (code + ' /') : '';
+            }).filter(Boolean);
+            return encLetters.join(' ').trim();
+          });
+          return encodedWords.join('/ ');
         }
 
-        // morse -> texte (lettres séparées par espace, mots par /)
-        function morseToText(str) {
+        function morseToTextCustom(str) {
           if (!str.trim()) return '';
-          const words = str.trim().split('/');
-          return words.map(w =>
-            w.trim().split(' ').map(sym => inverseMorse[sym] || '').join('')
-          ).join(' ');
+          const wordParts = str.split('//');
+          const words = wordParts.map(w => w.trim()).filter(Boolean);
+          const decodedWords = words.map(w => {
+            const cleaned = w.replace(/\/+/g, '/');
+            const letterParts = cleaned.split('/').map(s => s.trim()).filter(Boolean);
+            const letters = letterParts.map(letterBlock => {
+              const symbols = letterBlock.split(/\s+/).filter(Boolean);
+              const joined = symbols.join(' ');
+              return inverseMorse[joined] || '';
+            });
+            return letters.join('');
+          });
+          return decodedWords.join(' ');
         }
 
-        if (morseIO && morseResult) {
-          morseIO.addEventListener('input', () => {
-            const value = morseIO.value;
+        if (morseInput && morseOutput) {
+          morseInput.addEventListener('input', () => {
+            const value = morseInput.value;
             if (!value.trim()) {
-              morseResult.textContent = '';
+              morseOutput.value = '';
               return;
             }
             if (looksLikeMorse(value)) {
-              morseResult.textContent = morseToText(value);
+              morseOutput.value = morseToTextCustom(value);
             } else {
-              morseResult.textContent = textToMorse(value);
+              morseOutput.value = textToMorseCustom(value);
             }
           });
         }
 
-        /* --- CODE CÉSAR : live --- */
+        /* --- CÉSAR : haut = saisie, bas = résultat --- */
         function caesar(str, shift) {
           const A = 'A'.charCodeAt(0);
           const Z = 'Z'.charCodeAt(0);
@@ -811,156 +823,276 @@
           const k = parseInt(shiftInput.value || '0', 10);
           caesarOutput.value = caesar(caesarInput.value, k);
         }
-        function updateCaesarFromCipher() {
-          const k = parseInt(shiftInput.value || '0', 10);
-          caesarInput.value = caesar(caesarOutput.value, -k);
-        }
 
         if (caesarInput) {
           caesarInput.addEventListener('input', updateCaesarFromPlain);
         }
-        if (caesarOutput) {
-          caesarOutput.addEventListener('input', updateCaesarFromCipher);
-        }
         if (shiftInput) {
           shiftInput.addEventListener('input', () => {
-            if (document.activeElement === caesarInput) {
-              updateCaesarFromPlain();
-            } else {
-              updateCaesarFromCipher();
-            }
+            updateCaesarFromPlain();
           });
         }
 
-        /* --- SÉMAPHORE CANVAS --- */
-        const canvas = document.getElementById('semaphore-canvas');
-        const semaphoreLetterSpan = document.getElementById('semaphore-letter');
-        let draggingArm = null; // 'left' ou 'right'
-        const armAngles = { left: 45, right: 315 }; // angles initiaux
+/* --- SÉMAPHORE : alphabet (angles officiels) --- */
+const semaphoreAlphabet = {
+  'A': [135, 90], 'B': [180, 90], 'C': [225, 90], 'D': [270, 90],
+  'E': [90, 45],  'F': [90, 0],   'G': [90, 315], 'H': [180, 135],
+  'I': [225, 135], 'J': [270, 0],  'K': [135, 270], 'L': [135, 315],
+  'M': [135, 0],  'N': [135, 45], 'O': [180, 225], 'P': [180, 270],
+  'Q': [180, 315], 'R': [180, 0],  'S': [180, 45], 'T': [225, 270],
+  'U': [225, 315], 'V': [270, 45], 'W': [315, 0],  'X': [315, 45],
+  'Y': [225, 0],  'Z': [0, 45]
+};
 
-        // Mapping d'exemple (à compléter)
-        const semaphoreMap = {
-          '45-315': 'A',
-          '90-270': 'B',
-          '135-225': 'C',
-          '180-180': 'D',
-          '225-135': 'E',
-          '270-90': 'F',
-          '315-45': 'G'
-        };
+function keyFromAngles(aL, aR) { return `${aL}-${aR}`; }
+const semaphoreMap = {};
+Object.entries(semaphoreAlphabet).forEach(([letter, arr]) => {
+  const [left, right] = arr;
+  // Position officielle
+  semaphoreMap[keyFromAngles(left, right)] = letter;
+  // Tolérance : si on inverse bras gauche / bras droit, on détecte quand même la lettre !
+  semaphoreMap[keyFromAngles(right, left)] = letter;
+});
 
-        function drawSemaphore() {
-          if (!canvas) return;
-          const ctx = canvas.getContext('2d');
-          const w = canvas.width;
-          const h = canvas.height;
-          const cx = w / 2;
-          const cy = h / 2;
-          ctx.clearRect(0, 0, w, h);
+const canvas = document.getElementById('semaphore-canvas');
+const semaphoreLetterSpan = document.getElementById('semaphore-letter');
 
-          // cercle
-          ctx.strokeStyle = '#0a1d37';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(cx, cy, w/2 - 4, 0, Math.PI * 2);
-          ctx.stroke();
+/* --- état global bras (utilisé par le dessin canvas) --- */
+let armAngles = { left: semaphoreAlphabet['A'][0], right: semaphoreAlphabet['A'][1] };
+let targetAngles = { ...armAngles };
+let lastTimestamp = 0;
 
-          // corps
-          ctx.strokeStyle = '#0a1d37';
-          ctx.lineWidth = 6;
-          ctx.beginPath();
-          ctx.moveTo(cx, cy - 20);
-          ctx.lineTo(cx, cy + 40);
-          ctx.stroke();
+/* --- dessin du bonhomme sur le canvas --- */
+function drawSemaphoreFigure(ctx, w, h, leftAngle, rightAngle) {
+  const cx = w / 2;
+  const cy = h / 2 + 10;
 
-          // tête
-          ctx.beginPath();
-          ctx.arc(cx, cy - 30, 8, 0, Math.PI * 2);
-          ctx.stroke();
+  ctx.clearRect(0, 0, w, h);
 
-          // bras
-          function drawArm(angleDeg, color) {
-            const rad = angleDeg * Math.PI / 180;
-            const length = 80;
-            const x2 = cx + Math.cos(rad) * length;
-            const y2 = cy + Math.sin(rad) * length;
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 6;
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.lineTo(x2, y2);
-            ctx.stroke();
+  ctx.strokeStyle = '#0a1d37';
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
 
-            // petit drapeau en bout
-            ctx.fillStyle = color;
-            const flagLen = 20;
-            const ortho = rad + Math.PI / 2;
-            const fx1 = x2;
-            const fy1 = y2;
-            const fx2 = x2 + Math.cos(ortho) * flagLen;
-            const fy2 = y2 + Math.sin(ortho) * flagLen;
-            const fx3 = x2 + Math.cos(rad) * flagLen * 0.6;
-            const fy3 = y2 + Math.sin(rad) * flagLen * 0.6;
-            ctx.beginPath();
-            ctx.moveTo(fx1, fy1);
-            ctx.lineTo(fx2, fy2);
-            ctx.lineTo(fx3, fy3);
-            ctx.closePath();
-            ctx.fill();
-          }
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - 25);
+  ctx.lineTo(cx, cy + 35);
+  ctx.stroke();
 
-          drawArm(armAngles.left, '#b30000');
-          drawArm(armAngles.right, '#b30000');
-        }
+  ctx.beginPath();
+  ctx.arc(cx, cy - 35, 10, 0, Math.PI * 2);
+  ctx.stroke();
 
-        function snapAngle(deg) {
-          const step = 45;
-          return Math.round(deg / step) * step;
-        }
+  ctx.beginPath();
+  ctx.moveTo(cx, cy + 35);
+  ctx.lineTo(cx - 15, cy + 60);
+  ctx.moveTo(cx, cy + 35);
+  ctx.lineTo(cx + 15, cy + 60);
+  ctx.stroke();
 
-        function angleFromCenterCanvas(evt) {
-          const rect = canvas.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          const dx = evt.clientX - cx;
-          const dy = evt.clientY - cy;
-          let deg = Math.atan2(dy, dx) * 180 / Math.PI;
-          if (deg < 0) deg += 360;
-          return deg;
-        }
+  const shoulderY = cy - 10;
+  ctx.beginPath();
+  ctx.moveTo(cx - 18, shoulderY);
+  ctx.lineTo(cx + 18, shoulderY);
+  ctx.stroke();
 
-        function updateSemaphoreLetter() {
-          const aL = snapAngle(armAngles.left);
-          const aR = snapAngle(armAngles.right);
-          const key = `${aL}-${aR}`;
-          semaphoreLetterSpan.textContent = semaphoreMap[key] || '?';
-        }
+function drawArm(angleDeg, isLeft) {
+    const rad = angleDeg * Math.PI / 180;
+    const armLen = 70;
+    const shoulderX = isLeft ? cx - 18 : cx + 18;
+    const shoulderY = cy - 10;
+    const handX = shoulderX + Math.cos(rad) * armLen;
+    const handY = shoulderY + Math.sin(rad) * armLen;
 
-        if (canvas) {
-          drawSemaphore();
-          updateSemaphoreLetter();
+    // 1. Dessin du bras
+    ctx.strokeStyle = '#0a1d37';
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(shoulderX, shoulderY);
+    ctx.lineTo(handX, handY);
+    ctx.stroke();
 
-          canvas.addEventListener('mousedown', (evt) => {
-            const clickAngle = angleFromCenterCanvas(evt);
-            const diffLeft = Math.abs(clickAngle - armAngles.left);
-            const diffRight = Math.abs(clickAngle - armAngles.right);
-            draggingArm = diffLeft < diffRight ? 'left' : 'right';
-          });
+    // 2. Dessin du drapeau
+    const size = 22;
+    
+    ctx.save();
+    ctx.translate(handX, handY);
+    ctx.rotate(rad);
 
-          window.addEventListener('mousemove', (evt) => {
-            if (!draggingArm) return;
-            const deg = angleFromCenterCanvas(evt);
-            const snapped = snapAngle(deg);
-            armAngles[draggingArm] = snapped;
-            drawSemaphore();
-            updateSemaphoreLetter();
-          });
+    // L'astuce est ici : 
+    // Si c'est le bras gauche, on dessine le carré vers le haut (y négatif)
+    // Si c'est le bras droit, on le dessine vers le bas (y positif)
+    // On ajoute un petit offset de 2 pour ne pas coller à la main
+    const xOffset = -20;
+    const yOffset = isLeft ? -size : 0; 
 
-          window.addEventListener('mouseup', () => {
-            if (!draggingArm) return;
-            draggingArm = null;
-          });
-        }
+    // Triangle Jaune
+    ctx.fillStyle = '#ffdf40';
+    ctx.beginPath();
+    ctx.moveTo(xOffset, yOffset);
+    ctx.lineTo(xOffset + size, yOffset);
+    ctx.lineTo(xOffset, yOffset + size);
+    ctx.closePath();
+    ctx.fill();
+
+    // Triangle Rouge
+    ctx.fillStyle = '#c00000';
+    ctx.beginPath();
+    ctx.moveTo(xOffset + size, yOffset);
+    ctx.lineTo(xOffset + size, yOffset + size);
+    ctx.lineTo(xOffset, yOffset + size);
+    ctx.closePath();
+    ctx.fill();
+
+    // Bordure
+    ctx.strokeStyle = '#7a0000';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(xOffset, yOffset, size, size);
+
+    ctx.restore();
+}
+  drawArm(leftAngle, true);
+  drawArm(rightAngle, false);
+}
+
+function updateSemaphoreLetterFromAngles() {
+  const snap = d => Math.round(d / 45) * 45;
+  const aL = (snap(armAngles.left) + 360) % 360;
+  const aR = (snap(armAngles.right) + 360) % 360;
+  const key = keyFromAngles(aL, aR);
+  semaphoreLetterSpan.textContent = semaphoreMap[key] || '?';
+}
+
+function animateSemaphore(timestamp) {
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width;
+  const h = canvas.height;
+
+  const dt = (timestamp - lastTimestamp) / 1000 || 0;
+  lastTimestamp = timestamp;
+  const speed = 12;
+
+  ['left', 'right'].forEach(side => {
+    const current = armAngles[side];
+    const target = targetAngles[side];
+    let diff = target - current;
+    if (Math.abs(diff) > 180) diff = diff - Math.sign(diff) * 360;
+    const step = diff * Math.min(1, dt * speed);
+    armAngles[side] = (current + step + 360) % 360;
+  });
+
+  drawSemaphoreFigure(ctx, w, h, armAngles.left, armAngles.right);
+  updateSemaphoreLetterFromAngles();
+  requestAnimationFrame(animateSemaphore);
+}
+
+if (canvas) {
+  requestAnimationFrame(animateSemaphore);
+}
+
+/* --- LOGIQUE DE GLISSER-DÉPOSER (DRAG & DROP) SUR LE SÉMAPHORE --- */
+let draggingArm = null;
+
+function getPointerPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top
+  };
+}
+
+function getHandPos(isLeft, angleDeg) {
+  const rad = angleDeg * Math.PI / 180;
+  const armLen = 70;
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2 + 10;
+  const shoulderX = isLeft ? cx - 18 : cx + 18;
+  const shoulderY = cy - 10;
+  return {
+    x: shoulderX + Math.cos(rad) * armLen,
+    y: shoulderY + Math.sin(rad) * armLen
+  };
+}
+
+function handlePointerDown(e) {
+  const pos = getPointerPos(e);
+  const leftHand = getHandPos(true, targetAngles.left);
+  const rightHand = getHandPos(false, targetAngles.right);
+
+  // Vérifier si on clique près d'un drapeau (marge de 40px)
+  const distLeft = Math.hypot(pos.x - leftHand.x, pos.y - leftHand.y);
+  const distRight = Math.hypot(pos.x - rightHand.x, pos.y - rightHand.y);
+
+  const threshold = 40;
+  if (distLeft < threshold && distLeft <= distRight) {
+    draggingArm = 'left';
+    e.preventDefault();
+  } else if (distRight < threshold) {
+    draggingArm = 'right';
+    e.preventDefault();
+  }
+}
+
+function handlePointerMove(e) {
+  const pos = getPointerPos(e);
+
+  // Changement de curseur au survol
+  if (!draggingArm && e.type === 'mousemove') {
+    const leftHand = getHandPos(true, targetAngles.left);
+    const rightHand = getHandPos(false, targetAngles.right);
+    const distL = Math.hypot(pos.x - leftHand.x, pos.y - leftHand.y);
+    const distR = Math.hypot(pos.x - rightHand.x, pos.y - rightHand.y);
+    canvas.style.cursor = (distL < 40 || distR < 40) ? 'grab' : 'default';
+    return;
+  }
+
+  if (!draggingArm) return;
+  e.preventDefault();
+  canvas.style.cursor = 'grabbing';
+
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2 + 10;
+  const isLeft = draggingArm === 'left';
+  const shoulderX = isLeft ? cx - 18 : cx + 18;
+  const shoulderY = cy - 10;
+
+  // Calculer l'angle de la souris par rapport à l'épaule
+  let angleRad = Math.atan2(pos.y - shoulderY, pos.x - shoulderX);
+  let angleDeg = angleRad * 180 / Math.PI;
+  if (angleDeg < 0) angleDeg += 360;
+
+  // Aimantation à l'angle standard le plus proche (multiple de 45°)
+  const snapped = Math.round(angleDeg / 45) * 45;
+  const normalized = (snapped + 360) % 360;
+
+  // Mettre à jour l'angle sans animation pour un rendu immédiat pendant le drag
+  armAngles[draggingArm] = normalized;
+  targetAngles[draggingArm] = normalized;
+  
+  updateSemaphoreLetterFromAngles();
+}
+
+function handlePointerUp() {
+  draggingArm = null;
+  canvas.style.cursor = 'default';
+}
+
+if (canvas) {
+  // Événements Souris
+  canvas.addEventListener('mousedown', handlePointerDown);
+  canvas.addEventListener('mousemove', handlePointerMove);
+  canvas.addEventListener('mouseup', handlePointerUp);
+  canvas.addEventListener('mouseleave', handlePointerUp);
+
+  // Événements Tactiles (Mobile)
+  canvas.addEventListener('touchstart', handlePointerDown, { passive: false });
+  canvas.addEventListener('touchmove', handlePointerMove, { passive: false });
+  canvas.addEventListener('touchend', handlePointerUp);
+  canvas.addEventListener('touchcancel', handlePointerUp);
+}
+
     </script>
 </body>
 </html>
