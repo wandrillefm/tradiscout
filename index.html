@@ -477,6 +477,7 @@
                     <button onclick="showCodeTab('code-semaphore', this)" class="active">Sémaphore</button>
                     <button onclick="showCodeTab('code-morse', this)">Morse</button>
                     <button onclick="showCodeTab('code-caesar', this)">César</button>
+                    <button onclick="showCodeTab('code-vigenere', this)">Vigenère</button>
                 </div>
 
                 <!-- SÉMAPHORE (version translator) -->
@@ -504,6 +505,20 @@
                     </label>
                     <textarea id="caesar-input" rows="3" placeholder="Texte clair"></textarea>
                     <textarea id="caesar-output" rows="3" placeholder="Texte chiffré" readonly></textarea>
+                </div>
+                <div id="code-vigenere" class="code-tab">
+                    <p>Le code Vigenère utilise un mot-clé pour crypter le message. C'est un César qui change à chaque lettre !</p>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" id="vig-key" placeholder="MOT-CLÉ (ex: SCOUT)" style="flex: 2; padding: 8px; text-transform: uppercase;">
+                        <select id="vig-mode" style="flex: 1; padding: 8px; background: transparent; border: 1px solid var(--navy); color: var(--navy); border-radius: 4px;">
+                            <option value="encode">Chiffrer</option>
+                            <option value="decode">Déchiffrer</option>
+                        </select>
+                    </div>
+                    
+                    <textarea id="vig-input" rows="3" placeholder="Message à traiter"></textarea>
+                    <textarea id="vig-output" rows="3" placeholder="Résultat" readonly style="background: rgba(10, 29, 55, 0.05);"></textarea>
                 </div>
             </div>
 
@@ -1092,7 +1107,48 @@ if (canvas) {
   canvas.addEventListener('touchend', handlePointerUp);
   canvas.addEventListener('touchcancel', handlePointerUp);
 }
+/* --- VIGENERE : logique de chiffrement/déchiffrement --- */
+function vigenereLogic(text, key, mode) {
+    if (!key) return text;
+    let result = "";
+    key = key.toUpperCase().replace(/[^A-Z]/g, "");
+    if (key.length === 0) return text;
 
+    let keyIndex = 0;
+    for (let i = 0; i < text.length; i++) {
+        let char = text[i];
+        if (/[a-zA-Z]/.test(char)) {
+            let isUpper = char === char.toUpperCase();
+            let base = isUpper ? 65 : 97;
+            let shift = key.charCodeAt(keyIndex % key.length) - 65;
+            if (mode === "decode") shift = -shift;
+
+            let charCode = char.charCodeAt(0) - base;
+            let newChar = String.fromCharCode(((charCode + shift % 26 + 26) % 26) + base);
+            
+            result += newChar;
+            keyIndex++;
+        } else {
+            result += char;
+        }
+    }
+    return result;
+}
+
+const vigInput = document.getElementById('vig-input');
+const vigKey = document.getElementById('vig-key');
+const vigMode = document.getElementById('vig-mode');
+const vigOutput = document.getElementById('vig-output');
+
+function updateVigenere() {
+    vigOutput.value = vigenereLogic(vigInput.value, vigKey.value, vigMode.value);
+}
+
+if (vigInput) {
+    vigInput.addEventListener('input', updateVigenere);
+    vigKey.addEventListener('input', updateVigenere);
+    vigMode.addEventListener('change', updateVigenere);
+}
     </script>
 </body>
 </html>
