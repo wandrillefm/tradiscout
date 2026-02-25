@@ -348,18 +348,6 @@
             border: 2px solid var(--navy);
             background: rgba(255, 255, 255, 0.9);
         }
-        
-        .result-box {
-            margin-top: 10px;
-            padding: 15px;
-            background-color: rgba(10, 29, 55, 0.05); /* Bleu marine très léger */
-            border-left: 4px solid var(--navy);
-            min-height: 50px;
-            word-wrap: break-word;
-            text-align: left;
-            font-family: 'Sanchez', serif;
-            border-radius: 0 4px 4px 0;
-        }
     </style>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -506,7 +494,7 @@
                 <div id="code-morse" class="code-tab">
                     <p>Écris du texte ou du morse dans la zone du haut, le résultat apparaît en dessous.</p>
                     <textarea id="morse-input" rows="3" placeholder="Texte ou Morse"></textarea>
-                    <textarea id="morse-output" class="result-box"></textarea>
+                    <textarea id="morse-output" rows="3" placeholder="Résultat" readonly style="background: rgba(10, 29, 55, 0.05);"></textarea>
                 </div>
 
                 <!-- César : haut = saisie, bas = résultat -->
@@ -516,7 +504,7 @@
                         <input type="number" id="shift" value="3" min="0" max="25" style="width:60px; padding:4px; margin:10px;">
                     </label>
                     <textarea id="caesar-input" rows="3" placeholder="Texte clair"></textarea>
-                    <textarea id="caesar-output" class="result-box"></textarea>
+                    <textarea id="caesar-output" rows="3" placeholder="Résultat" readonly style="background: rgba(10, 29, 55, 0.05);"></textarea>
                 </div>
 
                 <!-- Vigenere -->
