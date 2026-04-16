@@ -1,786 +1,144 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tradiscout</title>
-    <link rel="icon" type="image/x-icon" href="FINAL.png">
-    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --navy: #2C3776;
-            --bg: #F8F2E7;
-            --or: #c9a84c;
-            --gris: #6b6b6b;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: var(--bg);
-            color: var(--navy);
-            font-family: 'DM Mono', monospace;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        #loader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--navy);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 2000; transition: opacity 0.6s ease;
-        }
-        .typewriter-text {
-            color: var(--bg);
-            font-family: 'Uncial Antiqua', serif;
-            font-size: 2.5rem; letter-spacing: 5px;
-            border-right: 3px solid var(--bg);
-            white-space: nowrap; overflow: hidden; width: 0;
-            padding-right: 5px;
-        }
-        .cursor-blink { animation: blink 0.7s infinite; }
-        @keyframes blink { 50% { border-color: transparent; } }
-
-        #main-content {
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 600;
-            background: var(--bg);
-            border-bottom: 1px solid rgba(44,55,118,0.12);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 5%;
-            height: 64px;
-        }
-
-        .logo {
-            font-family: 'Uncial Antiqua', serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: opacity 0.3s;
-            font-size: 1.6rem;
-            color: var(--navy);
-            text-decoration: none;
-        }
-        .logo:hover { opacity: 0.65; }
-
-        .main-nav {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-        .main-nav a {
-            text-decoration: none;
-            color: var(--navy);
-            font-size: 0.72rem;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            text-transform: lowercase;
-            position: relative;
-            padding-bottom: 3px;
-            opacity: 0.4;
-            transition: opacity 0.2s;
-        }
-        .main-nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 0; height: 1px;
-            background: var(--navy);
-            transition: width 0.25s ease;
-        }
-        .main-nav a:hover { opacity: 1; }
-        .main-nav a:hover::after { width: 100%; }
-        .main-nav a.active { opacity: 1; }
-        .main-nav a.active::after { width: 100%; }
-
-        .content-wrap {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 60px 5% 80px;
-            min-height: calc(100vh - 64px - 320px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .tab { animation: fadeIn 0.4s ease forwards; width: 100%; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .content-wrap p {
-            font-size: 0.78rem;
-            line-height: 1.8;
-            max-width: 580px;
-            margin: 0 auto;
-            padding: 15px;
-            color: var(--navy);
-        }
-
-        .boutique-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.2rem;
-            width: 100%;
-        }
-        .boutique-link {
-            display: inline-block;
-            padding: 0.75rem 2rem;
-            border: 1px solid var(--navy);
-            background: var(--navy);
-            color: var(--bg);
-            font-family: 'DM Mono', monospace;
-            font-size: 0.62rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .boutique-link:hover { background: transparent; color: var(--navy); }
-
-        .code-nav {
-            display: flex;
-            justify-content: center;
-            gap: 4px;
-            margin-top: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .code-nav button {
-            padding: 0.3rem 0.7rem;
-            border: 1px solid rgba(44,55,118,0.22);
-            background: transparent;
-            color: var(--navy);
-            cursor: pointer;
-            font-family: 'DM Mono', monospace;
-            font-size: 0.6rem;
-            letter-spacing: 0.05em;
-            transition: 0.12s;
-        }
-        .code-nav button:hover { border-color: var(--navy); }
-        .code-nav button.active {
-            background: var(--navy);
-            color: var(--bg);
-            border-color: var(--navy);
-        }
-        .code-tab { display: none; }
-
-        textarea {
-            width: 100%;
-            padding: 8px;
-            resize: none;
-            height: 90px;
-            overflow: auto;
-            border: 1px solid rgba(44,55,118,0.22);
-            background: white;
-            font-family: 'DM Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--navy);
-            margin-top: 6px;
-        }
-
-        .semaphore-wrapper { margin-top: 20px; margin-bottom: 40px; }
-        #semaphore-canvas {
-            border: 1px solid rgba(44,55,118,0.22);
-            background: white;
-        }
-
-        #order-popup {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
-        }
-        .popup-inner {
-            background: var(--bg);
-            color: var(--navy);
-            padding: 24px 28px;
-            max-width: 320px;
-            text-align: left;
-            border: 1px solid var(--navy);
-            animation: fadeIn 0.2s ease;
-        }
-        .popup-inner h3 {
-            font-family: 'Uncial Antiqua', serif;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-        .popup-inner p {
-            font-size: 0.65rem !important;
-            line-height: 1.7 !important;
-            margin-bottom: 15px;
-            padding: 0 !important;
-        }
-        .popup-close {
-            display: inline-block;
-            padding: 0.55rem 1.1rem;
-            border: 1px solid var(--navy);
-            background: var(--navy);
-            color: var(--bg);
-            font-family: 'DM Mono', monospace;
-            font-size: 0.6rem;
-            letter-spacing: 0.08em;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .popup-close:hover { background: transparent; color: var(--navy); }
-
-        footer {
-            background: var(--navy);
-            color: var(--bg);
-            padding: 64px 5% 40px;
-        }
-
-        .footer-inner {
-            max-width: 860px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1.4fr 1fr 1fr;
-            gap: 48px;
-        }
-
-        .footer-logo-mark {
-            font-family: 'Uncial Antiqua', serif;
-            font-size: 1.7rem;
-            letter-spacing: 2px;
-            display: block;
-            margin-bottom: 14px;
-        }
-
-        .footer-tagline {
-            font-size: 0.6rem;
-            opacity: 0.5;
-            line-height: 1.8;
-            letter-spacing: 0.04em;
-            max-width: 200px;
-        }
-
-        .footer-col-title {
-            font-size: 0.52rem;
-            letter-spacing: 0.18em;
-            text-transform: uppercase;
-            color: var(--or);
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .footer-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .footer-links li a {
-            color: var(--bg);
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            transition: opacity 0.2s;
-            opacity: 0.7;
-        }
-        .footer-links li a:hover { opacity: 1; }
-        .footer-links li a .fl-label {
-            font-size: 0.46rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            opacity: 0.5;
-        }
-        .footer-links li a .fl-name {
-            font-size: 0.62rem;
-            letter-spacing: 0.05em;
-        }
-
-        .footer-contact-text {
-            font-size: 0.6rem;
-            opacity: 0.5;
-            line-height: 1.8;
-            margin-bottom: 16px;
-        }
-        .footer-email {
-            color: var(--or);
-            text-decoration: none;
-            font-size: 0.62rem;
-            letter-spacing: 0.06em;
-            transition: opacity 0.2s;
-            display: inline-block;
-        }
-        .footer-email:hover { opacity: 0.7; }
-
-        .footer-bottom {
-            max-width: 860px;
-            margin: 48px auto 0;
-            padding-top: 20px;
-            border-top: 1px solid rgba(248,242,231,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .footer-bottom span {
-            font-size: 0.5rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            opacity: 0.35;
-        }
-
-        .tab-bar { display: none; }
-
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-
-        @media (max-width: 768px) {
-            header { padding: 0 4%; height: 56px; }
-            .logo { font-size: 1.25rem; }
-            .main-nav { display: none; }
-
-            .content-wrap {
-                padding: 40px 5% 110px;
-                min-height: auto;
-                align-items: flex-start;
-                padding-top: 48px;
-            }
-
-            .tab-bar {
-                display: flex;
-                position: fixed;
-                bottom: 0; left: 0;
-                width: 100%;
-                background: var(--bg);
-                border-top: 1px solid rgba(44,55,118,0.13);
-                z-index: 600;
-                padding-bottom: env(safe-area-inset-bottom, 0px);
-            }
-
-            .tab-bar-btn {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 10px 0 9px;
-                gap: 4px;
-                cursor: pointer;
-                border: none;
-                background: none;
-                color: var(--navy);
-                font-family: 'DM Mono', monospace;
-                opacity: 0.28;
-                transition: opacity 0.18s;
-            }
-            .tab-bar-btn.active { opacity: 1; }
-            .tab-bar-btn svg { width: 21px; height: 21px; }
-            .tab-bar-btn span {
-                font-size: 0.46rem;
-                letter-spacing: 0.07em;
-                text-transform: lowercase;
-            }
-
-            footer {
-                padding: 48px 5% calc(80px + env(safe-area-inset-bottom, 0px));
-            }
-
-            .footer-inner {
-                grid-template-columns: 1fr;
-                gap: 36px;
-            }
-
-            .footer-tagline { max-width: 100%; }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 8px;
-                text-align: center;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Tradiscout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="no-scrollbar">
 
-    <div id="loader">
-        <div id="typewriter" class="typewriter-text cursor-blink"></div>
-    </div>
+<body>
 
-    <div id="main-content">
-        <header>
-            <a class="logo" onclick="show('home')">TRADISCOUT</a>
-            <nav class="main-nav">
-                <a onclick="show('home')" id="nav-home" class="active">accueil</a>
-                <a onclick="show('boutique')" id="nav-boutique">boutique</a>
-                <a onclick="show('code')" id="nav-code">code</a>
-            </nav>
-        </header>
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Tradiscout</a>
+    <nav class="nav-links">
+      <a href="#hero">Accueil</a>
+      <a href="#stats">Chiffres</a>
+      <a href="#team">Équipe</a>
+      <a href="#support">Impact</a>
+      <a href="https://shop.tradiscout.com" target="_blank">Boutique</a>
+      <a href="https://code.tradiscout.com" target="_blank">Code</a>
+    </nav>
+    <button class="nav-toggle"><span></span><span></span><span></span></button>
+  </div>
+</header>
 
-        <div class="content-wrap">
-            <div id="home" class="tab">
-                <p>Depuis début 2025, nous aidons les jeunes à vivre leur foi tous les jours, par le scoutisme. Ce qui n'était au départ qu'un simple compte insta de rigolade, est devenue une véritable communauté animée par une équipe de 7 jeunes, offrant à tous des débats, du contenu, et des nouvelles sur le scoutisme et la chrétienté à travers l'Europe et plus particulièrement en France.</p>
-            </div>
-
-            <div id="boutique" class="tab" style="display:none">
-                <div class="boutique-wrap">
-                    <p>Sweats et t-shirts pour porter la flamme scout au quotidien !</p>
-                    <a href="https://tradiscout-shop.vercel.app" target="_blank" class="boutique-link">Commandez ici →</a>
-                </div>
-            </div>
-
-            <div id="code" class="tab" style="display:none">
-                <div class="code-nav">
-                    <button onclick="showCodeTab('code-semaphore', this)" class="active">Sémaphore</button>
-                    <button onclick="showCodeTab('code-morse', this)">Morse</button>
-                    <button onclick="showCodeTab('code-caesar', this)">César</button>
-                    <button onclick="showCodeTab('code-vigenere', this)">Vigenère</button>
-                </div>
-
-                <div id="code-semaphore" class="code-tab" style="display:block">
-                    <p>Fais tourner les bras du sémaphore pour voir la lettre correspondante.</p>
-                    <div class="semaphore-wrapper">
-                        <canvas id="semaphore-canvas" width="260" height="260"></canvas>
-                        <p>Lettre détectée : <span id="semaphore-letter">?</span></p>
-                    </div>
-                </div>
-
-                <div id="code-morse" class="code-tab">
-                    <p>Écris du texte ou du morse, le résultat apparaît en dessous.</p>
-                    <textarea id="morse-input" placeholder="Texte ou Morse"></textarea>
-                    <textarea id="morse-output" placeholder="Résultat" readonly style="background:rgba(44,55,118,0.04)"></textarea>
-                </div>
-
-                <div id="code-caesar" class="code-tab">
-                    <p>Choisis un décalage et écris ton texte.</p>
-                    <label style="font-size:0.6rem;letter-spacing:0.08em">Décalage :
-                        <input type="number" id="shift" value="3" min="0" max="25" style="width:60px;padding:4px;margin:10px;border:1px solid rgba(44,55,118,0.22);background:white;font-family:'DM Mono',monospace;">
-                    </label>
-                    <textarea id="caesar-input" placeholder="Texte clair"></textarea>
-                    <textarea id="caesar-output" placeholder="Résultat" readonly style="background:rgba(44,55,118,0.04)"></textarea>
-                </div>
-
-                <div id="code-vigenere" class="code-tab">
-                    <p>Le code Vigenère utilise un mot-clé pour crypter le message.</p>
-                    <div style="display:flex;gap:8px;margin-bottom:6px;margin-top:8px">
-                        <input type="text" id="vig-key" placeholder="MOT-CLÉ (ex: SCOUT)" style="flex:2;padding:8px;text-transform:uppercase;border:1px solid rgba(44,55,118,0.22);background:white;font-family:'DM Mono',monospace;font-size:0.65rem;">
-                        <select id="vig-mode" style="flex:1;padding:8px;background:white;border:1px solid rgba(44,55,118,0.22);color:var(--navy);font-family:'DM Mono',monospace;font-size:0.65rem;">
-                            <option value="encode">Chiffrer</option>
-                            <option value="decode">Déchiffrer</option>
-                        </select>
-                    </div>
-                    <textarea id="vig-input" placeholder="Message à traiter"></textarea>
-                    <textarea id="vig-output" placeholder="Résultat" readonly style="background:rgba(44,55,118,0.04)"></textarea>
-                </div>
-            </div>
-        </div>
-
-        <footer>
-            <div class="footer-inner">
-                <div>
-                    <span class="footer-logo-mark">TRADISCOUT</span>
-                    <p class="footer-tagline">Une communauté de scouts chrétiens animée par une équipe de 7 jeunes. Vers le haut, toujours.</p>
-                </div>
-
-                <div>
-                    <span class="footer-col-title">Rejoindre</span>
-                    <ul class="footer-links">
-                        <li><a href="https://instagram.com/tradiscout" target="_blank">
-                            <span class="fl-label">Instagram</span>
-                            <span class="fl-name">@tradiscout · 4 200+</span>
-                        </a></li>
-                        <li><a href="https://pinterest.com/tradiscout" target="_blank">
-                            <span class="fl-label">Pinterest</span>
-                            <span class="fl-name">20+ fonds d'écran</span>
-                        </a></li>
-                        <li><a href="https://instagram.com/channel/AbYQB1ZxjbUUhCE5" target="_blank">
-                            <span class="fl-label">Groupe de prière</span>
-                            <span class="fl-name">Tous les vendredis</span>
-                        </a></li>
-                        <li><a href="https://www.deezer.com/fr/playlist/13549630343" target="_blank">
-                            <span class="fl-label">Deezer</span>
-                            <span class="fl-name">615 titres</span>
-                        </a></li>
-                        <li><a href="https://open.spotify.com/playlist/4dol5mUeugWo8hvZdXnvZ8" target="_blank">
-                            <span class="fl-label">Spotify</span>
-                            <span class="fl-name">494 titres</span>
-                        </a></li>
-                        <li><a href="https://tradiscout.notion.site/Pr-parer-ses-activit-s-2ad8736dad9f80a3b259da56bb5a5615" target="_blank">
-                            <span class="fl-label">Notion</span>
-                            <span class="fl-name">Ressources activités</span>
-                        </a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <span class="footer-col-title">Contact</span>
-                    <p class="footer-contact-text">Une suggestion, une photo, ou rejoindre l'équipe ?</p>
-                    <a href="mailto:tradiscout@gmail.com" class="footer-email">tradiscout@gmail.com</a>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <span>© 2026 Tradiscout</span>
-                <span>Verso l'Alto!</span>
-            </div>
-        </footer>
-
-        <nav class="tab-bar">
-            <button class="tab-bar-btn active" id="tb-home" onclick="show('home')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
-                    <path d="M9 21V12h6v9"/>
-                </svg>
-                <span>accueil</span>
-            </button>
-            <button class="tab-bar-btn" id="tb-boutique" onclick="show('boutique')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <path d="M16 10a4 4 0 0 1-8 0"/>
-                </svg>
-                <span>boutique</span>
-            </button>
-            <button class="tab-bar-btn" id="tb-code" onclick="show('code')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="16 18 22 12 16 6"/>
-                    <polyline points="8 6 2 12 8 18"/>
-                </svg>
-                <span>code</span>
-            </button>
-        </nav>
-    </div>
-
-    <div id="order-popup">
-      <div class="popup-inner">
-        <h3>Commande envoyée</h3>
-        <p>Votre commande a été envoyée, vous allez recevoir un lien de paiement sous peu, à votre adresse email.</p>
-        <button type="button" class="popup-close" onclick="closeOrderPopup()">Fermer</button>
+<section id="hero" class="hero">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <div class="hero-text">
+      <h1>La tradition scoute, à portée de clic.</h1>
+      <p>Outils, ressources et boutique au service des maîtrises et des unités.</p>
+      <div class="hero-actions">
+        <a href="#stats" class="btn btn-primary">Découvrir</a>
+        <a href="https://shop.tradiscout.com" class="btn btn-ghost" target="_blank">Boutique</a>
       </div>
     </div>
+  </div>
+</section>
 
-    <script>
-        const text = "TRADISCOUT";
-        const target = document.getElementById('typewriter');
-        let i = 0;
-        function type() {
-            if (i < text.length) {
-                target.innerText += text.charAt(i++);
-                target.style.width = 'auto';
-                setTimeout(type, 120);
-            } else {
-                setTimeout(() => {
-                    document.getElementById('loader').style.opacity = '0';
-                    document.getElementById('main-content').style.opacity = '1';
-                    setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 600);
-                }, 800);
-            }
-        }
-        window.addEventListener('load', () => { setTimeout(type, 500); });
+<section id="stats" class="section section-light">
+  <div class="container">
+    <div class="section-header">
+      <h2>Des outils pour le terrain</h2>
+      <p>Une initiative née du terrain, pour le terrain.</p>
+    </div>
 
-        function show(id) {
-            document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
-            document.getElementById(id).style.display = 'block';
-            document.querySelectorAll('.main-nav a').forEach(a => a.classList.remove('active'));
-            const navEl = document.getElementById('nav-' + id);
-            if (navEl) navEl.classList.add('active');
-            document.querySelectorAll('.tab-bar-btn').forEach(b => b.classList.remove('active'));
-            const tbEl = document.getElementById('tb-' + id);
-            if (tbEl) tbEl.classList.add('active');
-            window.scrollTo(0, 0);
-        }
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-number">120+</div><div class="stat-label">unités accompagnées</div></div>
+      <div class="stat-card"><div class="stat-number">5000+</div><div class="stat-label">jeunes concernés</div></div>
+      <div class="stat-card"><div class="stat-number">3</div><div class="stat-label">outils numériques</div></div>
+      <div class="stat-card"><div class="stat-number">1</div><div class="stat-label">boutique dédiée</div></div>
+    </div>
+  </div>
+</section>
 
-        function showCodeTab(id, btn) {
-            document.querySelectorAll('.code-tab').forEach(t => t.style.display = 'none');
-            document.getElementById(id).style.display = 'block';
-            document.querySelectorAll('.code-nav button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
+<section id="team" class="section section-plain">
+  <div class="container">
+    <div class="section-header">
+      <h2>L’équipe Tradiscout</h2>
+      <p>Une équipe engagée au service du scoutisme.</p>
+    </div>
 
-        function openOrderPopup() { document.getElementById('order-popup').style.display = 'flex'; }
-        function closeOrderPopup() { document.getElementById('order-popup').style.display = 'none'; }
+    <div class="team-grid">
 
-        const morseMap = {
-          'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---',
-          'K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-',
-          'U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..',
-          '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.'
-        };
-        const inverseMorse = Object.fromEntries(Object.entries(morseMap).map(([k,v]) => [v,k]));
+      <!-- 7 membres -->
+      <div class="team-card">
+        <div class="team-photo"><img src="images/team1.jpg"></div>
+        <h3>Nom Prénom</h3><p class="team-meta">24 ans — Chef de troupe</p>
+        <p class="team-text">Coordination et développement des outils.</p>
+      </div>
 
-        function looksLikeMorse(str) { return /^[.\-\/\s]+$/.test(str.trim()); }
-        function textToMorseCustom(str) {
-          return str.toUpperCase().replace(/[^A-Z0-9 ]/g,'').split(/\s+/).filter(Boolean)
-            .map(w => w.split('').map(c => morseMap[c] ? morseMap[c]+' /' : '').filter(Boolean).join(' ').trim())
-            .join('/ ');
-        }
-        function morseToTextCustom(str) {
-          if (!str.trim()) return '';
-          return str.split('//').map(w => w.trim()).filter(Boolean)
-            .map(w => w.replace(/\/+/g,'/').split('/').map(s => s.trim()).filter(Boolean)
-              .map(b => inverseMorse[b.split(/\s+/).join(' ')] || '').join('')).join(' ');
-        }
+      <div class="team-card">
+        <div class="team-photo"><img src="images/team2.jpg"></div>
+        <h3>Nom Prénom</h3><p class="team-meta">22 ans — Cheftaine</p>
+        <p class="team-text">Lien avec les maîtrises et retours terrain.</p>
+      </div>
 
-        const morseInput = document.getElementById('morse-input');
-        const morseOutput = document.getElementById('morse-output');
-        if (morseInput) {
-          morseInput.addEventListener('input', () => {
-            const v = morseInput.value;
-            morseOutput.value = !v.trim() ? '' : looksLikeMorse(v) ? morseToTextCustom(v) : textToMorseCustom(v);
-          });
-        }
+      <div class="team-card">
+        <div class="team-photo"><img src="images/team3.jpg"></div>
+        <h3>Nom Prénom</h3><p class="team-meta">25 ans — Développeur</p>
+        <p class="team-text">Architecture technique et fiabilité.</p>
+      </div>
 
-        function caesar(str, shift) {
-          return str.split('').map(ch => {
-            const code = ch.charCodeAt(0);
-            if (code >= 65 && code <= 90) return String.fromCharCode(((code-65+shift+26)%26)+65);
-            if (code >= 97 && code <= 122) return String.fromCharCode(((code-97+shift+26)%26)+97);
-            return ch;
-          }).join('');
-        }
-        const caesarInput = document.getElementById('caesar-input');
-        const caesarOutput = document.getElementById('caesar-output');
-        const shiftInput = document.getElementById('shift');
-        function updateCaesar() { if(caesarOutput) caesarOutput.value = caesar(caesarInput.value, parseInt(shiftInput.value||'0',10)); }
-        if (caesarInput) { caesarInput.addEventListener('input', updateCaesar); shiftInput.addEventListener('input', updateCaesar); }
+      <div class="team-card">
+        <div class="team-photo"><img src="images/team4.jpg"></div>
+        <h3>Nom Prénom</h3><p class="team-meta">23 ans — Graphiste</p>
+        <p class="team-text">Identité visuelle et cohérence UX.</p>
+      </div>
 
-        const semaphoreAlphabet = {
-          'A':[135,90],'B':[180,90],'C':[225,90],'D':[270,90],'E':[90,315],'F':[90,0],'G':[90,45],'H':[180,135],
-          'I':[225,135],'J':[270,0],'K':[135,270],'L':[135,315],'M':[135,0],'N':[135,45],'O':[180,225],'P':[180,270],
-          'Q':[180,315],'R':[180,0],'S':[180,45],'T':[225,270],'U':[225,315],'V':[270,45],'W':[315,0],'X':[315,45],
-          'Y':[225,0],'Z':[0,45]
-        };
-        const semaphoreMap = {};
-        Object.entries(semaphoreAlphabet).forEach(([l,[left,right]]) => {
-          semaphoreMap[`${left}-${right}`] = l;
-          semaphoreMap[`${right}-${left}`] = l;
-        });
-        const canvas = document.getElementById('semaphore-canvas');
-        const semaphoreLetterSpan = document.getElementById('semaphore-letter');
-        let armAngles = { left: 135, right: 90 };
-        let targetAngles = { ...armAngles };
-        let lastTimestamp = 0;
+      <div class="team-card">
+        <div class="team-photo"><img src="images/team5.jpg"></div>
+        <h3>Nom Prénom</h3><p class="team-meta">21 ans — Chef d’unité</p>
+        <p class="team-text">Tests terrain et retours pratiques.</p>
+      </div>
 
-        function drawSemaphoreFigure(ctx, w, h, leftAngle, rightAngle) {
-          const cx = w/2, cy = h/2+10;
-          ctx.clearRect(0,0,w,h);
-          ctx.strokeStyle = '#2C3776'; ctx.lineWidth = 5; ctx.lineCap = 'round';
-          ctx.beginPath(); ctx.moveTo(cx,cy-25); ctx.lineTo(cx,cy+35); ctx.stroke();
-          ctx.beginPath(); ctx.arc(cx,cy-35,10,0,Math.PI*2); ctx.stroke();
-          ctx.beginPath(); ctx.moveTo(cx,cy+35); ctx.lineTo(cx-15,cy+60); ctx.moveTo(cx,cy+35); ctx.lineTo(cx+15,cy+60); ctx.stroke();
-          ctx.beginPath(); ctx.moveTo(cx-18,cy-10); ctx.lineTo(cx+18,cy-10); ctx.stroke();
-          function drawArm(angleDeg, isLeft) {
-            const rad = angleDeg*Math.PI/180, armLen = 70;
-            const sx = isLeft ? cx-18 : cx+18, sy = cy-10;
-            const hx = sx+Math.cos(rad)*armLen, hy = sy+Math.sin(rad)*armLen;
-            ctx.strokeStyle = '#2C3776'; ctx.lineWidth = 5;
-            ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(hx,hy); ctx.stroke();
-            const size = 22;
-            ctx.save(); ctx.translate(hx,hy); ctx.rotate(rad);
-            const xo = -20, yo = isLeft ? -size : 0;
-            ctx.fillStyle = '#ffdf40'; ctx.beginPath(); ctx.moveTo(xo,yo); ctx.lineTo(xo+size,yo); ctx.lineTo(xo,yo+size); ctx.closePath(); ctx.fill();
-            ctx.fillStyle = '#c00000'; ctx.beginPath(); ctx.moveTo(xo+size,yo); ctx.lineTo(xo+size,yo+size); ctx.lineTo(xo,yo+size); ctx.closePath(); ctx.fill();
-            ctx.strokeStyle = '#7a0000'; ctx.lineWidth = 1.5; ctx.strokeRect(xo,yo,size,size);
-            ctx.restore();
-          }
-          drawArm(leftAngle, true); drawArm(rightAngle, false);
-        }
+      <div class="team-card">
+        <div class="team-photo"><img src="images/team6.jpg"></div>
+        <h3>Nom Prénom</h3><p class="team-meta">26 ans — Responsable projet</p>
+        <p class="team-text">Coordination et suivi des chantiers.</p>
+      </div>
 
-        function updateSemaphoreLetterFromAngles() {
-          const snap = d => Math.round(d/45)*45;
-          const aL = (snap(armAngles.left)+360)%360, aR = (snap(armAngles.right)+360)%360;
-          semaphoreLetterSpan.textContent = semaphoreMap[`${aL}-${aR}`] || '?';
-        }
+      <div class="team-card">
+        <div class="team-photo"><img src="images/team7.jpg"></div>
+        <h3>Nom Prénom</h3><p class="team-meta">23 ans — Communication</p>
+        <p class="team-text">Visibilité et diffusion.</p>
+      </div>
 
-        function animateSemaphore(timestamp) {
-          if (!canvas) return;
-          const ctx = canvas.getContext('2d'), dt = (timestamp-lastTimestamp)/1000||0;
-          lastTimestamp = timestamp;
-          ['left','right'].forEach(side => {
-            let diff = targetAngles[side]-armAngles[side];
-            if (Math.abs(diff) > 180) diff -= Math.sign(diff)*360;
-            armAngles[side] = (armAngles[side]+diff*Math.min(1,dt*12)+360)%360;
-          });
-          drawSemaphoreFigure(ctx,canvas.width,canvas.height,armAngles.left,armAngles.right);
-          updateSemaphoreLetterFromAngles();
-          requestAnimationFrame(animateSemaphore);
-        }
-        if (canvas) requestAnimationFrame(animateSemaphore);
+    </div>
+  </div>
+</section>
 
-        let draggingArm = null;
-        function getPointerPos(e) {
-          const rect = canvas.getBoundingClientRect();
-          return { x: (e.touches?e.touches[0].clientX:e.clientX)-rect.left, y: (e.touches?e.touches[0].clientY:e.clientY)-rect.top };
-        }
-        function getHandPos(isLeft, angleDeg) {
-          const rad = angleDeg*Math.PI/180, cx = canvas.width/2, cy = canvas.height/2+10;
-          const sx = isLeft ? cx-18 : cx+18;
-          return { x: sx+Math.cos(rad)*70, y: cy-10+Math.sin(rad)*70 };
-        }
-        function handlePointerDown(e) {
-          const pos = getPointerPos(e);
-          const lh = getHandPos(true,targetAngles.left), rh = getHandPos(false,targetAngles.right);
-          const dL = Math.hypot(pos.x-lh.x,pos.y-lh.y), dR = Math.hypot(pos.x-rh.x,pos.y-rh.y);
-          if (dL < 40 && dL <= dR) { draggingArm='left'; e.preventDefault(); }
-          else if (dR < 40) { draggingArm='right'; e.preventDefault(); }
-        }
-        function handlePointerMove(e) {
-          const pos = getPointerPos(e);
-          if (!draggingArm && e.type==='mousemove') {
-            const lh=getHandPos(true,targetAngles.left), rh=getHandPos(false,targetAngles.right);
-            canvas.style.cursor = (Math.hypot(pos.x-lh.x,pos.y-lh.y)<40||Math.hypot(pos.x-rh.x,pos.y-rh.y)<40)?'grab':'default';
-            return;
-          }
-          if (!draggingArm) return;
-          e.preventDefault(); canvas.style.cursor = 'grabbing';
-          const cx=canvas.width/2, cy=canvas.height/2+10, isLeft=draggingArm==='left';
-          const sx=isLeft?cx-18:cx+18, sy=cy-10;
-          let ang = Math.atan2(pos.y-sy,pos.x-sx)*180/Math.PI;
-          if (ang<0) ang+=360;
-          const norm = (Math.round(ang/45)*45+360)%360;
-          armAngles[draggingArm] = targetAngles[draggingArm] = norm;
-          updateSemaphoreLetterFromAngles();
-        }
-        function handlePointerUp() { draggingArm=null; canvas.style.cursor='default'; }
-        if (canvas) {
-          canvas.addEventListener('mousedown',handlePointerDown);
-          canvas.addEventListener('mousemove',handlePointerMove);
-          canvas.addEventListener('mouseup',handlePointerUp);
-          canvas.addEventListener('mouseleave',handlePointerUp);
-          canvas.addEventListener('touchstart',handlePointerDown,{passive:false});
-          canvas.addEventListener('touchmove',handlePointerMove,{passive:false});
-          canvas.addEventListener('touchend',handlePointerUp);
-          canvas.addEventListener('touchcancel',handlePointerUp);
-        }
+<section id="support" class="section section-light">
+  <div class="container">
+    <div class="section-header">
+      <h2>Notre impact</h2>
+      <p>Une présence croissante au service du scoutisme.</p>
+    </div>
 
-        function vigenereLogic(text, key, mode) {
-          if (!key) return text;
-          key = key.toUpperCase().replace(/[^A-Z]/g,'');
-          if (!key.length) return text;
-          let result='', ki=0;
-          for (let c of text) {
-            if (/[a-zA-Z]/.test(c)) {
-              const upper = c===c.toUpperCase(), base = upper?65:97;
-              let shift = key.charCodeAt(ki%key.length)-65;
-              if (mode==='decode') shift=-shift;
-              result += String.fromCharCode(((c.charCodeAt(0)-base+shift%26+26)%26)+base);
-              ki++;
-            } else result += c;
-          }
-          return result;
-        }
-        const vigInput=document.getElementById('vig-input'), vigKey=document.getElementById('vig-key'),
-              vigMode=document.getElementById('vig-mode'), vigOutput=document.getElementById('vig-output');
-        function updateVigenere() { if(vigOutput) vigOutput.value = vigenereLogic(vigInput.value,vigKey.value,vigMode.value); }
-        if (vigInput) { vigInput.addEventListener('input',updateVigenere); vigKey.addEventListener('input',updateVigenere); vigMode.addEventListener('change',updateVigenere); }
-    </script>
+    <div class="impact-grid">
+      <div class="impact-card"><div class="impact-number">4 000+</div><div class="impact-label">abonnés Instagram</div></div>
+      <div class="impact-card"><div class="impact-number">500</div><div class="impact-label">titres en playlists</div></div>
+      <div class="impact-card"><div class="impact-number">9 M</div><div class="impact-label">vues cumulées</div></div>
+    </div>
+
+    <div class="support-badge">
+      <div class="support-badge-inner">
+        <span class="support-label">Soutenus par</span>
+        <span class="support-main">l’AGSE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>© Tradiscout — <span id="year"></span></div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
 </body>
 </html>
