@@ -370,24 +370,10 @@
         </nav>
     </div>
 
-    <script>
-        const text = "TRADISCOUT";
-        const target = document.getElementById('typewriter');
-        let i = 0;
-        function type() {
-            if (i < text.length) {
-                target.innerText += text.charAt(i++);
-                target.style.width = 'auto';
-                setTimeout(type, 120);
-            } else {
-                setTimeout(() => {
-                    document.getElementById('loader').style.opacity = '0';
-                    document.getElementById('main-content').style.opacity = '1';
-                    setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 600);
-                }, 800);
-            }
-        }
-        window.addEventListener('load', () => { setTimeout(type, 500); });
-    </script>
+<script>
+    window.addEventListener('load', () => {
+        document.getElementById('main-content').style.opacity = '1';
+    });
+</script>
 </body>
 </html>
