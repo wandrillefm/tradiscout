@@ -10,9 +10,9 @@
 </head>
 <body class="no-scrollbar">
 
-    <!-- LOADER (Texte tapé + Zoom + Fade) -->
+    <!-- LOADER AVEC ZOOM ET TRANSPARENCE -->
     <div id="loader">
-        <div id="typewriter" class="typewriter-text"></div>
+        <div id="typewriter" class="typewriter-text cursor-blink"></div>
     </div>
 
     <div id="main-content">
@@ -26,10 +26,12 @@
         </header>
 
         <div class="content-wrap">
+            <!-- ACCUEIL -->
             <div id="home" class="tab">
                 <p>Depuis début 2025, nous aidons les jeunes à vivre leur foi tous les jours, par le scoutisme. Ce qui n'était au départ qu'un simple compte insta de rigolade, est devenue une véritable communauté animée par une équipe de 7 jeunes, offrant à tous des débats, du contenu, et des nouvelles sur le scoutisme et la chrétienté à travers l'Europe et plus particulièrement en France.</p>
             </div>
 
+            <!-- BOUTIQUE -->
             <div id="boutique" class="tab" style="display:none">
                 <div class="boutique-wrap">
                     <p>Sweats et t-shirts pour porter la flamme scout au quotidien !</p>
@@ -37,6 +39,7 @@
                 </div>
             </div>
 
+            <!-- CODE (EXACTEMENT TON CODE ORIGINAL) -->
             <div id="code" class="tab" style="display:none">
                 <div class="code-nav">
                     <button onclick="showCodeTab('code-semaphore', this)" class="active">Sémaphore</button>
@@ -54,58 +57,57 @@
                 </div>
 
                 <div id="code-morse" class="code-tab">
+                    <p>Écris du texte ou du morse, le résultat apparaît en dessous.</p>
                     <textarea id="morse-input" placeholder="Texte ou Morse"></textarea>
                     <textarea id="morse-output" placeholder="Résultat" readonly style="background:rgba(44,55,118,0.04)"></textarea>
                 </div>
 
                 <div id="code-caesar" class="code-tab">
-                    <label style="font-size:0.6rem;">Décalage :
-                        <input type="number" id="shift" value="3" min="0" max="25" class="shift-input">
+                    <p>Choisis un décalage et écris ton texte.</p>
+                    <label style="font-size:0.6rem;letter-spacing:0.08em">Décalage :
+                        <input type="number" id="shift" value="3" min="0" max="25" style="width:60px;padding:4px;margin:10px;border:1px solid rgba(44,55,118,0.22);background:white;font-family:'DM Mono',monospace;">
                     </label>
                     <textarea id="caesar-input" placeholder="Texte clair"></textarea>
                     <textarea id="caesar-output" placeholder="Résultat" readonly style="background:rgba(44,55,118,0.04)"></textarea>
                 </div>
 
                 <div id="code-vigenere" class="code-tab">
-                    <div class="vig-controls">
-                        <input type="text" id="vig-key" placeholder="MOT-CLÉ" class="vig-key">
-                        <select id="vig-mode" class="vig-mode">
+                    <p>Le code Vigenère utilise un mot-clé pour crypter le message.</p>
+                    <div style="display:flex;gap:8px;margin-bottom:6px;margin-top:8px">
+                        <input type="text" id="vig-key" placeholder="MOT-CLÉ (ex: SCOUT)" style="flex:2;padding:8px;text-transform:uppercase;border:1px solid rgba(44,55,118,0.22);background:white;font-family:'DM Mono',monospace;font-size:0.65rem;">
+                        <select id="vig-mode" style="flex:1;padding:8px;background:white;border:1px solid rgba(44,55,118,0.22);color:var(--navy);font-family:'DM Mono',monospace;font-size:0.65rem;">
                             <option value="encode">Chiffrer</option>
                             <option value="decode">Déchiffrer</option>
                         </select>
                     </div>
-                    <textarea id="vig-input" placeholder="Message..."></textarea>
+                    <textarea id="vig-input" placeholder="Message à traiter"></textarea>
                     <textarea id="vig-output" placeholder="Résultat" readonly style="background:rgba(44,55,118,0.04)"></textarea>
                 </div>
             </div>
         </div>
 
+        <!-- FOOTER 3 COLONNES -->
         <footer>
             <div class="footer-inner">
-                <!-- COLONNE 1 : RÉSEAUX -->
-                <div class="footer-col">
+                <div>
                     <span class="footer-col-title">Réseaux</span>
                     <ul class="footer-links">
                         <li><a href="https://instagram.com/tradiscout" target="_blank"><span class="fl-label">Instagram</span><span class="fl-name">@tradiscout</span></a></li>
-                        <li><a href="https://pinterest.com/tradiscout" target="_blank"><span class="fl-label">Pinterest</span><span class="fl-name">Fonds d'écrans</span></a></li>
+                        <li><a href="https://pinterest.com/tradiscout" target="_blank"><span class="fl-label">Pinterest</span><span class="fl-name">Fonds d'écran</span></a></li>
                         <li><a href="https://facebook.com/tradiscout" target="_blank"><span class="fl-label">Facebook</span><span class="fl-name">Tradiscout</span></a></li>
                         <li><a href="https://tiktok.com/@tradiscout" target="_blank"><span class="fl-label">TikTok</span><span class="fl-name">@tradiscout</span></a></li>
                     </ul>
                 </div>
-
-                <!-- COLONNE 2 : RESSOURCES -->
-                <div class="footer-col">
+                <div>
                     <span class="footer-col-title">Ressources</span>
                     <ul class="footer-links">
-                        <li><a href="https://open.spotify.com/playlist/4dol5mUeugWo8hvZdXnvZ8" target="_blank"><span class="fl-label">Spotify</span><span class="fl-name">Playlists scoutes</span></a></li>
-                        <li><a href="https://www.deezer.com/fr/playlist/13549630343" target="_blank"><span class="fl-label">Deezer</span><span class="fl-name">Playlists scoutes</span></a></li>
-                        <li><a href="https://tradiscout.notion.site/Pr-parer-ses-activit-s-2ad8736dad9f80a3b259da56bb5a5615" target="_blank"><span class="fl-label">Notion</span><span class="fl-name">Activités</span></a></li>
-                        <li><a href="https://instagram.com/channel/AbYQB1ZxjbUUhCE5" target="_blank"><span class="fl-label">Prière</span><span class="fl-name">Groupe Vendredi</span></a></li>
+                        <li><a href="https://open.spotify.com/playlist/4dol5mUeugWo8hvZdXnvZ8" target="_blank"><span class="fl-label">Spotify</span><span class="fl-name">494 titres scoutes</span></a></li>
+                        <li><a href="https://www.deezer.com/fr/playlist/13549630343" target="_blank"><span class="fl-label">Deezer</span><span class="fl-name">615 titres scoutes</span></a></li>
+                        <li><a href="https://tradiscout.notion.site/Pr-parer-ses-activit-s-2ad8736dad9f80a3b259da56bb5a5615" target="_blank"><span class="fl-label">Notion</span><span class="fl-name">Fiches activités</span></a></li>
+                        <li><a href="https://instagram.com/channel/AbYQB1ZxjbUUhCE5" target="_blank"><span class="fl-label">Prière</span><span class="fl-name">Tous les vendredis</span></a></li>
                     </ul>
                 </div>
-
-                <!-- COLONNE 3 : CONTACT -->
-                <div class="footer-col">
+                <div>
                     <span class="footer-col-title">Contact</span>
                     <p class="footer-contact-text">Une suggestion ou une photo ?</p>
                     <a href="mailto:tradiscout@gmail.com" class="footer-email">tradiscout@gmail.com</a>
@@ -117,7 +119,7 @@
             </div>
         </footer>
 
-        <!-- MOBILE TAB BAR (UNIQUEMENT MOBILE) -->
+        <!-- TAB BAR MOBILE UNIQUEMENT -->
         <nav class="tab-bar">
             <button class="tab-bar-btn active" id="tb-home" onclick="show('home')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
