@@ -6,136 +6,406 @@
     <title>Tradiscout</title>
     <link rel="icon" type="image/x-icon" href="FINAL.png">
     <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --navy: #2C3776;
+            --bg: #F8F2E7;
+            --or: #c9a84c;
+            --gris: #6b6b6b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--navy);
+            font-family: 'DM Mono', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--navy);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2000; transition: opacity 0.6s ease;
+        }
+        .typewriter-text {
+            color: var(--bg);
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 2.5rem; letter-spacing: 5px;
+            border-right: 3px solid var(--bg);
+            white-space: nowrap; overflow: hidden; width: 0;
+            padding-right: 5px;
+        }
+        .cursor-blink { animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        #main-content {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 600;
+            background: var(--bg);
+            border-bottom: 1px solid rgba(44,55,118,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            height: 64px;
+        }
+
+        .logo {
+            font-family: 'Uncial Antiqua', serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+            font-size: 1.6rem;
+            color: var(--navy);
+            text-decoration: none;
+        }
+        .logo:hover { opacity: 0.65; }
+
+        .main-nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+        .main-nav a {
+            text-decoration: none;
+            color: var(--navy);
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            text-transform: lowercase;
+            position: relative;
+            padding-bottom: 3px;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 1px;
+            background: var(--navy);
+            transition: width 0.25s ease;
+        }
+        .main-nav a:hover { opacity: 1; }
+        .main-nav a:hover::after { width: 100%; }
+        .main-nav a.active { opacity: 1; }
+        .main-nav a.active::after { width: 100%; }
+
+        .content-wrap {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 5% 80px;
+            min-height: calc(100vh - 64px - 320px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .tab { animation: fadeIn 0.4s ease forwards; width: 100%; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-wrap p {
+            font-size: 0.85rem;
+            line-height: 1.8;
+            max-width: 650px;
+            margin: 0 auto 1.5rem auto;
+            color: var(--navy);
+            text-align: justify;
+        }
+
+        footer {
+            background: var(--navy);
+            color: var(--bg);
+            padding: 64px 5% 40px;
+        }
+
+        .footer-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 48px;
+        }
+
+        .footer-logo-mark {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 1.7rem;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 14px;
+        }
+
+        .footer-tagline {
+            font-size: 0.6rem;
+            opacity: 0.5;
+            line-height: 1.8;
+            letter-spacing: 0.04em;
+            max-width: 200px;
+        }
+
+        .footer-col-title {
+            font-size: 0.52rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--or);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .footer-links li a {
+            color: var(--bg);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            transition: opacity 0.2s;
+            opacity: 0.7;
+        }
+        .footer-links li a:hover { opacity: 1; }
+        .footer-links li a .fl-label {
+            font-size: 0.46rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+        .footer-links li a .fl-name {
+            font-size: 0.62rem;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-contact-text {
+            font-size: 0.6rem;
+            opacity: 0.5;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .footer-email {
+            color: var(--or);
+            text-decoration: none;
+            font-size: 0.62rem;
+            letter-spacing: 0.06em;
+            transition: opacity 0.2s;
+            display: inline-block;
+        }
+        .footer-email:hover { opacity: 0.7; }
+
+        .footer-bottom {
+            max-width: 860px;
+            margin: 48px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(248,242,231,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .footer-bottom span {
+            font-size: 0.5rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.35;
+        }
+
+        .tab-bar { display: none; }
+
+        @media (max-width: 768px) {
+            header { padding: 0 4%; height: 56px; }
+            .logo { font-size: 1.25rem; }
+            .main-nav { display: none; }
+
+            .content-wrap {
+                padding: 40px 5% 110px;
+                min-height: auto;
+                align-items: flex-start;
+                padding-top: 48px;
+            }
+
+            .tab-bar {
+                display: flex;
+                position: fixed;
+                bottom: 0; left: 0;
+                width: 100%;
+                background: var(--bg);
+                border-top: 1px solid rgba(44,55,118,0.13);
+                z-index: 600;
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+
+            .tab-bar-btn {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 14px 0;
+                cursor: pointer;
+                border: none;
+                background: none;
+                color: var(--navy);
+                font-family: 'DM Mono', monospace;
+                opacity: 0.28;
+                transition: opacity 0.18s;
+            }
+            .tab-bar-btn.active { opacity: 1; }
+            .tab-bar-btn span {
+                font-size: 0.62rem;
+                letter-spacing: 0.1em;
+                text-transform: lowercase;
+            }
+
+            footer {
+                padding: 48px 5% calc(80px + env(safe-area-inset-bottom, 0px));
+            }
+
+            .footer-inner {
+                grid-template-columns: 1fr;
+                gap: 36px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body class="no-scrollbar">
 
-    <!-- LOADER AVEC ZOOM ET TRANSPARENCE -->
     <div id="loader">
         <div id="typewriter" class="typewriter-text cursor-blink"></div>
     </div>
 
     <div id="main-content">
         <header>
-            <a class="logo" onclick="show('home')">TRADISCOUT</a>
+            <a class="logo" href="/">TRADISCOUT</a>
             <nav class="main-nav">
-                <a onclick="show('home')" id="nav-home" class="active">accueil</a>
-                <a onclick="show('boutique')" id="nav-boutique">boutique</a>
-                <a onclick="show('code')" id="nav-code">code</a>
+                <a href="/" class="active">accueil</a>
+                <a href="https://shop.tradiscout.com" target="_blank">boutique</a>
+                <a href="https://code.tradiscout.com">code</a>
             </nav>
         </header>
 
         <div class="content-wrap">
-            <!-- ACCUEIL -->
             <div id="home" class="tab">
-                <p>Depuis début 2025, nous aidons les jeunes à vivre leur foi tous les jours, par le scoutisme. Ce qui n'était au départ qu'un simple compte insta de rigolade, est devenue une véritable communauté animée par une équipe de 7 jeunes, offrant à tous des débats, du contenu, et des nouvelles sur le scoutisme et la chrétienté à travers l'Europe et plus particulièrement en France.</p>
-            </div>
-
-            <!-- BOUTIQUE -->
-            <div id="boutique" class="tab" style="display:none">
-                <div class="boutique-wrap">
-                    <p>Sweats et t-shirts pour porter la flamme scout au quotidien !</p>
-                    <a href="https://shop.tradiscout.com" target="_blank" class="boutique-link">Accéder à la boutique →</a>
-                </div>
-            </div>
-
-            <!-- CODE (EXACTEMENT TON CODE ORIGINAL) -->
-            <div id="code" class="tab" style="display:none">
-                <div class="code-nav">
-                    <button onclick="showCodeTab('code-semaphore', this)" class="active">Sémaphore</button>
-                    <button onclick="showCodeTab('code-morse', this)">Morse</button>
-                    <button onclick="showCodeTab('code-caesar', this)">César</button>
-                    <button onclick="showCodeTab('code-vigenere', this)">Vigenère</button>
-                </div>
-
-                <div id="code-semaphore" class="code-tab" style="display:block">
-                    <p>Fais tourner les bras du sémaphore pour voir la lettre correspondante.</p>
-                    <div class="semaphore-wrapper">
-                        <canvas id="semaphore-canvas" width="260" height="260"></canvas>
-                        <p>Lettre détectée : <span id="semaphore-letter">?</span></p>
-                    </div>
-                </div>
-
-                <div id="code-morse" class="code-tab">
-                    <p>Écris du texte ou du morse, le résultat apparaît en dessous.</p>
-                    <textarea id="morse-input" placeholder="Texte ou Morse"></textarea>
-                    <textarea id="morse-output" placeholder="Résultat" readonly style="background:rgba(44,55,118,0.04)"></textarea>
-                </div>
-
-                <div id="code-caesar" class="code-tab">
-                    <p>Choisis un décalage et écris ton texte.</p>
-                    <label style="font-size:0.6rem;letter-spacing:0.08em">Décalage :
-                        <input type="number" id="shift" value="3" min="0" max="25" style="width:60px;padding:4px;margin:10px;border:1px solid rgba(44,55,118,0.22);background:white;font-family:'DM Mono',monospace;">
-                    </label>
-                    <textarea id="caesar-input" placeholder="Texte clair"></textarea>
-                    <textarea id="caesar-output" placeholder="Résultat" readonly style="background:rgba(44,55,118,0.04)"></textarea>
-                </div>
-
-                <div id="code-vigenere" class="code-tab">
-                    <p>Le code Vigenère utilise un mot-clé pour crypter le message.</p>
-                    <div style="display:flex;gap:8px;margin-bottom:6px;margin-top:8px">
-                        <input type="text" id="vig-key" placeholder="MOT-CLÉ (ex: SCOUT)" style="flex:2;padding:8px;text-transform:uppercase;border:1px solid rgba(44,55,118,0.22);background:white;font-family:'DM Mono',monospace;font-size:0.65rem;">
-                        <select id="vig-mode" style="flex:1;padding:8px;background:white;border:1px solid rgba(44,55,118,0.22);color:var(--navy);font-family:'DM Mono',monospace;font-size:0.65rem;">
-                            <option value="encode">Chiffrer</option>
-                            <option value="decode">Déchiffrer</option>
-                        </select>
-                    </div>
-                    <textarea id="vig-input" placeholder="Message à traiter"></textarea>
-                    <textarea id="vig-output" placeholder="Résultat" readonly style="background:rgba(44,55,118,0.04)"></textarea>
-                </div>
+                <p>Bienvenue sur Tradiscout. Notre mission est de faire vivre l'esprit du scoutisme au-delà des activités de terrain. À travers le partage de réflexions spirituelles, de techniques scoutes et d'un humour qui nous est propre, nous formons une communauté soudée autour des valeurs chrétiennes et de l'aventure.</p>
+                
+                <p>Née en 2025 et animée par une équipe de sept jeunes passionnés, Tradiscout propose des ressources concrètes pour les chefs et les scouts : mise en relation de patrouilles pour des correspondances européennes, concours photo pour célébrer la beauté de nos camps, et une boutique dédiée pour porter la flamme scout au quotidien.</p>
+                
+                <p style="text-align: center; font-style: italic; opacity: 0.8;">"Le scoutisme et la foi ne s'arrêtent pas au camp."</p>
             </div>
         </div>
 
-        <!-- FOOTER 3 COLONNES -->
         <footer>
             <div class="footer-inner">
                 <div>
                     <span class="footer-col-title">Réseaux</span>
                     <ul class="footer-links">
-                        <li><a href="https://instagram.com/tradiscout" target="_blank"><span class="fl-label">Instagram</span><span class="fl-name">@tradiscout</span></a></li>
-                        <li><a href="https://pinterest.com/tradiscout" target="_blank"><span class="fl-label">Pinterest</span><span class="fl-name">Fonds d'écran</span></a></li>
-                        <li><a href="https://facebook.com/tradiscout" target="_blank"><span class="fl-label">Facebook</span><span class="fl-name">Tradiscout</span></a></li>
-                        <li><a href="https://tiktok.com/@tradiscout" target="_blank"><span class="fl-label">TikTok</span><span class="fl-name">@tradiscout</span></a></li>
+                        <li><a href="https://instagram.com/tradiscout" target="_blank">
+                            <span class="fl-label">Instagram</span>
+                            <span class="fl-name">@tradiscout · 4 200+</span>
+                        </a></li>
+                        <li><a href="https://www.tiktok.com/@tradiscout" target="_blank">
+                            <span class="fl-label">TikTok</span>
+                            <span class="fl-name">@tradiscout</span>
+                        </a></li>
+                        <li><a href="https://www.facebook.com/tradiscout" target="_blank">
+                            <span class="fl-label">Facebook</span>
+                            <span class="fl-name">Tradiscout</span>
+                        </a></li>
+                        <li><a href="https://pinterest.com/tradiscout" target="_blank">
+                            <span class="fl-label">Pinterest</span>
+                            <span class="fl-name">20+ fonds d'écran</span>
+                        </a></li>
+                        <li><a href="https://instagram.com/channel/AbYQB1ZxjbUUhCE5" target="_blank">
+                            <span class="fl-label">Groupe de prière</span>
+                            <span class="fl-name">Tous les vendredis</span>
+                        </a></li>
                     </ul>
                 </div>
+
                 <div>
                     <span class="footer-col-title">Ressources</span>
                     <ul class="footer-links">
-                        <li><a href="https://open.spotify.com/playlist/4dol5mUeugWo8hvZdXnvZ8" target="_blank"><span class="fl-label">Spotify</span><span class="fl-name">494 titres scoutes</span></a></li>
-                        <li><a href="https://www.deezer.com/fr/playlist/13549630343" target="_blank"><span class="fl-label">Deezer</span><span class="fl-name">615 titres scoutes</span></a></li>
-                        <li><a href="https://tradiscout.notion.site/Pr-parer-ses-activit-s-2ad8736dad9f80a3b259da56bb5a5615" target="_blank"><span class="fl-label">Notion</span><span class="fl-name">Fiches activités</span></a></li>
-                        <li><a href="https://instagram.com/channel/AbYQB1ZxjbUUhCE5" target="_blank"><span class="fl-label">Prière</span><span class="fl-name">Tous les vendredis</span></a></li>
+                        <li><a href="https://code.tradiscout.com">
+                            <span class="fl-label">Transmission</span>
+                            <span class="fl-name">Outils Morse & Sémaphore</span>
+                        </a></li>
+                        <li><a href="https://open.spotify.com/playlist/4dol5mUeugWo8hvZdXnvZ8" target="_blank">
+                            <span class="fl-label">Spotify</span>
+                            <span class="fl-name">494 titres</span>
+                        </a></li>
+                        <li><a href="https://tradiscout.notion.site/Pr-parer-ses-activit-s-2ad8736dad9f80a3b259da56bb5a5615" target="_blank">
+                            <span class="fl-label">Notion</span>
+                            <span class="fl-name">Ressources activités</span>
+                        </a></li>
                     </ul>
                 </div>
+
                 <div>
                     <span class="footer-col-title">Contact</span>
-                    <p class="footer-contact-text">Une suggestion ou une photo ?</p>
+                    <p class="footer-contact-text">Une suggestion, une photo, ou rejoindre l'équipe ?</p>
                     <a href="mailto:tradiscout@gmail.com" class="footer-email">tradiscout@gmail.com</a>
                 </div>
             </div>
+
             <div class="footer-bottom">
                 <span>© 2026 Tradiscout</span>
                 <span>Verso l'Alto!</span>
             </div>
         </footer>
 
-        <!-- TAB BAR MOBILE UNIQUEMENT -->
         <nav class="tab-bar">
-            <button class="tab-bar-btn active" id="tb-home" onclick="show('home')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <button class="tab-bar-btn active" onclick="window.location.href='/'">
                 <span>accueil</span>
             </button>
-            <button class="tab-bar-btn" id="tb-boutique" onclick="show('boutique')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <button class="tab-bar-btn" onclick="window.open('https://shop.tradiscout.com','_blank')">
                 <span>boutique</span>
             </button>
-            <button class="tab-bar-btn" id="tb-code" onclick="show('code')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <button class="tab-bar-btn" onclick="window.location.href='https://code.tradiscout.com'">
                 <span>code</span>
             </button>
         </nav>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const text = "TRADISCOUT";
+        const target = document.getElementById('typewriter');
+        let i = 0;
+        function type() {
+            if (i < text.length) {
+                target.innerText += text.charAt(i++);
+                target.style.width = 'auto';
+                setTimeout(type, 120);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('loader').style.opacity = '0';
+                    document.getElementById('main-content').style.opacity = '1';
+                    setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 600);
+                }, 800);
+            }
+        }
+        window.addEventListener('load', () => { setTimeout(type, 500); });
+    </script>
 </body>
 </html>
