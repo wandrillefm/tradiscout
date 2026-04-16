@@ -2,7 +2,6 @@
 const text = "TRADISCOUT";
 const target = document.getElementById('typewriter');
 let i = 0;
-
 function type() {
     if (i < text.length) {
         target.innerText += text.charAt(i++);
@@ -42,24 +41,47 @@ function showCodeTab(id, btn) {
 }
 
 /* ── MORSE ── */
-const morseMap = {
-    'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---','K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-','U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.'
-};
-const invMorse = Object.fromEntries(Object.entries(morseMap).map(([k,v]) => [v,k]));
+const morseMap = {'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---','K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-','U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.'};
+const inverseMorse = Object.fromEntries(Object.entries(morseMap).map(([k,v]) => [v,k]));
 
-document.getElementById('morse-input').addEventListener('input', (e) => {
-    const val = e.target.value.toUpperCase().trim();
-    if (!val) { document.getElementById('morse-output').value = ''; return; }
-    if (/[.\-]/.test(val)) {
-        const res = val.split('/').map(w => w.trim().split(' ').map(s => invMorse[s] || '?').join('')).join(' ');
-        document.getElementById('morse-output').value = res;
-    } else {
-        const res = val.split('').map(c => morseMap[c] || (c === ' ' ? '/' : '?')).join(' ');
-        document.getElementById('morse-output').value = res;
-    }
-});
+function looksLikeMorse(str) { return /^[.\-\/\s]+$/.test(str.trim()); }
+function textToMorseCustom(str) {
+    return str.toUpperCase().replace(/[^A-Z0-9 ]/g,'').split(/\s+/).filter(Boolean)
+    .map(w => w.split('').map(c => morseMap[c] ? morseMap[c]+' /' : '').filter(Boolean).join(' ').trim())
+    .join('/ ');
+}
+function morseToTextCustom(str) {
+    if (!str.trim()) return '';
+    return str.split('//').map(w => w.trim()).filter(Boolean)
+    .map(w => w.replace(/\/+/g,'/').split('/').map(s => s.trim()).filter(Boolean)
+    .map(b => inverseMorse[b.split(/\s+/).join(' ')] || '').join('')).join(' ');
+}
 
-/* ── SÉMAPHORE ── */
+const morseInput = document.getElementById('morse-input');
+const morseOutput = document.getElementById('morse-output');
+if (morseInput) {
+    morseInput.addEventListener('input', () => {
+        const v = morseInput.value;
+        morseOutput.value = !v.trim() ? '' : looksLikeMorse(v) ? morseToTextCustom(v) : textToMorseCustom(v);
+    });
+}
+
+/* ── CÉSAR ── */
+function caesar(str, shift) {
+    return str.split('').map(ch => {
+        const code = ch.charCodeAt(0);
+        if (code >= 65 && code <= 90) return String.fromCharCode(((code-65+shift+26)%26)+65);
+        if (code >= 97 && code <= 122) return String.fromCharCode(((code-97+shift+26)%26)+97);
+        return ch;
+    }).join('');
+}
+const caesarInput = document.getElementById('caesar-input');
+const caesarOutput = document.getElementById('caesar-output');
+const shiftInput = document.getElementById('shift');
+function updateCaesar() { if(caesarOutput) caesarOutput.value = caesar(caesarInput.value, parseInt(shiftInput.value||'0',10)); }
+if (caesarInput) { caesarInput.addEventListener('input', updateCaesar); shiftInput.addEventListener('input', updateCaesar); }
+
+/* ── SÉMAPHORE (TON CODE D'ORIGINE) ── */
 const semaphoreAlphabet = {
     'A':[135,90],'B':[180,90],'C':[225,90],'D':[270,90],'E':[90,315],'F':[90,0],'G':[90,45],'H':[180,135],
     'I':[225,135],'J':[270,0],'K':[135,270],'L':[135,315],'M':[135,0],'N':[135,45],'O':[180,225],'P':[180,270],
@@ -71,87 +93,119 @@ Object.entries(semaphoreAlphabet).forEach(([l,[left,right]]) => {
     semaphoreMap[`${left}-${right}`] = l;
     semaphoreMap[`${right}-${left}`] = l;
 });
-
 const canvas = document.getElementById('semaphore-canvas');
-const ctx = canvas.getContext('2d');
+const semaphoreLetterSpan = document.getElementById('semaphore-letter');
 let armAngles = { left: 135, right: 90 };
 let targetAngles = { ...armAngles };
-let draggingArm = null;
+let lastTimestamp = 0;
 
-function drawSemaphore() {
-    const cx = 130, cy = 140;
-    ctx.clearRect(0, 0, 260, 260);
+function drawSemaphoreFigure(ctx, w, h, leftAngle, rightAngle) {
+    const cx = w/2, cy = h/2+10;
+    ctx.clearRect(0,0,w,h);
     ctx.strokeStyle = '#2C3776'; ctx.lineWidth = 5; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(cx, cy-25); ctx.lineTo(cx, cy+35); ctx.stroke(); // Tronc
-    ctx.beginPath(); ctx.arc(cx, cy-35, 10, 0, Math.PI*2); ctx.stroke(); // Tête
-    ctx.beginPath(); ctx.moveTo(cx, cy+35); ctx.lineTo(cx-15, cy+60); ctx.moveTo(cx, cy+35); ctx.lineTo(cx+15, cy+60); ctx.stroke(); // Jambes
-
+    ctx.beginPath(); ctx.moveTo(cx,cy-25); ctx.lineTo(cx,cy+35); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx,cy-35,10,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,cy+35); ctx.lineTo(cx-15,cy+60); ctx.moveTo(cx,cy+35); ctx.lineTo(cx+15,cy+60); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx-18,cy-10); ctx.lineTo(cx+18,cy-10); ctx.stroke();
     function drawArm(angleDeg, isLeft) {
-        const rad = angleDeg * Math.PI / 180, armLen = 70;
+        const rad = angleDeg*Math.PI/180, armLen = 70;
         const sx = isLeft ? cx-18 : cx+18, sy = cy-10;
-        const hx = sx + Math.cos(rad)*armLen, hy = sy + Math.sin(rad)*armLen;
+        const hx = sx+Math.cos(rad)*armLen, hy = sy+Math.sin(rad)*armLen;
         ctx.strokeStyle = '#2C3776'; ctx.lineWidth = 5;
-        ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(hx, hy); ctx.stroke();
-        const size = 22; ctx.save(); ctx.translate(hx, hy); ctx.rotate(rad);
+        ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(hx,hy); ctx.stroke();
+        const size = 22;
+        ctx.save(); ctx.translate(hx,hy); ctx.rotate(rad);
         const xo = -20, yo = isLeft ? -size : 0;
         ctx.fillStyle = '#ffdf40'; ctx.beginPath(); ctx.moveTo(xo,yo); ctx.lineTo(xo+size,yo); ctx.lineTo(xo,yo+size); ctx.closePath(); ctx.fill();
         ctx.fillStyle = '#c00000'; ctx.beginPath(); ctx.moveTo(xo+size,yo); ctx.lineTo(xo+size,yo+size); ctx.lineTo(xo,yo+size); ctx.closePath(); ctx.fill();
+        ctx.strokeStyle = '#7a0000'; ctx.lineWidth = 1.5; ctx.strokeRect(xo,yo,size,size);
         ctx.restore();
     }
-    drawArm(armAngles.left, true);
-    drawArm(armAngles.right, false);
-    const snap = d => (Math.round(d/45)*45+360)%360;
-    document.getElementById('semaphore-letter').innerText = semaphoreMap[`${snap(armAngles.left)}-${snap(armAngles.right)}`] || '?';
+    drawArm(leftAngle, true); drawArm(rightAngle, false);
 }
 
-function animate() {
+function updateSemaphoreLetterFromAngles() {
+    const snap = d => Math.round(d/45)*45;
+    const aL = (snap(armAngles.left)+360)%360, aR = (snap(armAngles.right)+360)%360;
+    semaphoreLetterSpan.textContent = semaphoreMap[`${aL}-${aR}`] || '?';
+}
+
+function animateSemaphore(timestamp) {
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d'), dt = (timestamp-lastTimestamp)/1000||0;
+    lastTimestamp = timestamp;
     ['left','right'].forEach(side => {
-        let diff = targetAngles[side] - armAngles[side];
+        let diff = targetAngles[side]-armAngles[side];
         if (Math.abs(diff) > 180) diff -= Math.sign(diff)*360;
-        armAngles[side] = (armAngles[side] + diff * 0.2 + 360) % 360;
+        armAngles[side] = (armAngles[side]+diff*Math.min(1,dt*12)+360)%360;
     });
-    drawSemaphore();
-    requestAnimationFrame(animate);
+    drawSemaphoreFigure(ctx,canvas.width,canvas.height,armAngles.left,armAngles.right);
+    updateSemaphoreLetterFromAngles();
+    requestAnimationFrame(animateSemaphore);
 }
-animate();
+if (canvas) requestAnimationFrame(animateSemaphore);
 
-canvas.addEventListener('mousedown', (e) => {
+let draggingArm = null;
+function getPointerPos(e) {
     const rect = canvas.getBoundingClientRect();
-    draggingArm = (e.clientX - rect.left < 130) ? 'left' : 'right';
-});
-window.addEventListener('mousemove', (e) => {
+    return { x: (e.touches?e.touches[0].clientX:e.clientX)-rect.left, y: (e.touches?e.touches[0].clientY:e.clientY)-rect.top };
+}
+function getHandPos(isLeft, angleDeg) {
+    const rad = angleDeg*Math.PI/180, cx = canvas.width/2, cy = canvas.height/2+10;
+    const sx = isLeft ? cx-18 : cx+18;
+    return { x: sx+Math.cos(rad)*70, y: cy-10+Math.sin(rad)*70 };
+}
+function handlePointerDown(e) {
+    const pos = getPointerPos(e);
+    const lh = getHandPos(true,targetAngles.left), rh = getHandPos(false,targetAngles.right);
+    const dL = Math.hypot(pos.x-lh.x,pos.y-lh.y), dR = Math.hypot(pos.x-rh.x,pos.y-rh.y);
+    if (dL < 40 && dL <= dR) { draggingArm='left'; e.preventDefault(); }
+    else if (dR < 40) { draggingArm='right'; e.preventDefault(); }
+}
+function handlePointerMove(e) {
+    const pos = getPointerPos(e);
+    if (!draggingArm && e.type==='mousemove') {
+        const lh=getHandPos(true,targetAngles.left), rh=getHandPos(false,targetAngles.right);
+        canvas.style.cursor = (Math.hypot(pos.x-lh.x,pos.y-lh.y)<40||Math.hypot(pos.x-rh.x,pos.y-rh.y)<40)?'grab':'default';
+        return;
+    }
     if (!draggingArm) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left, y = e.clientY - rect.top;
-    const ang = Math.atan2(y - 130, x - (draggingArm==='left'?112:148)) * 180 / Math.PI;
-    targetAngles[draggingArm] = (Math.round(ang/45)*45+360)%360;
-});
-window.addEventListener('mouseup', () => draggingArm = null);
-
-/* ── CHIFFREMENTS ── */
-function caesar(s, k) {
-    return s.replace(/[a-z]/ig, c => {
-        const b = c < 'a' ? 65 : 97;
-        return String.fromCharCode((c.charCodeAt(0) - b + k + 26) % 26 + b);
-    });
+    e.preventDefault(); canvas.style.cursor = 'grabbing';
+    const cx=canvas.width/2, cy=canvas.height/2+10, isLeft=draggingArm==='left';
+    const sx=isLeft?cx-18:cx+18, sy=cy-10;
+    let ang = Math.atan2(pos.y-sy,pos.x-sx)*180/Math.PI;
+    if (ang<0) ang+=360;
+    const norm = (Math.round(ang/45)*45+360)%360;
+    armAngles[draggingArm] = targetAngles[draggingArm] = norm;
 }
-document.getElementById('caesar-input').addEventListener('input', () => {
-    const k = parseInt(document.getElementById('shift').value) || 0;
-    document.getElementById('caesar-output').value = caesar(document.getElementById('caesar-input').value, k);
-});
-
-function vigenere(t, k, enc) {
-    k = k.toUpperCase().replace(/[^A-Z]/g, '');
-    if (!k) return t;
-    let i = 0;
-    return t.replace(/[a-z]/ig, c => {
-        const b = c < 'a' ? 65 : 97;
-        const s = (k.charCodeAt(i++ % k.length) - 65) * (enc ? 1 : -1);
-        return String.fromCharCode((c.charCodeAt(0) - b + s + 26) % 26 + b);
-    });
+function handlePointerUp() { draggingArm=null; canvas.style.cursor='default'; }
+if (canvas) {
+    canvas.addEventListener('mousedown',handlePointerDown);
+    canvas.addEventListener('mousemove',handlePointerMove);
+    canvas.addEventListener('mouseup',handlePointerUp);
+    canvas.addEventListener('touchstart',handlePointerDown,{passive:false});
+    canvas.addEventListener('touchmove',handlePointerMove,{passive:false});
+    canvas.addEventListener('touchend',handlePointerUp);
 }
-document.getElementById('vig-input').addEventListener('input', () => {
-    const k = document.getElementById('vig-key').value;
-    const m = document.getElementById('vig-mode').value === 'encode';
-    document.getElementById('vig-output').value = vigenere(document.getElementById('vig-input').value, k, m);
-});
+
+/* ── VIGENÈRE ── */
+function vigenereLogic(text, key, mode) {
+    if (!key) return text;
+    key = key.toUpperCase().replace(/[^A-Z]/g,'');
+    if (!key.length) return text;
+    let result='', ki=0;
+    for (let c of text) {
+        if (/[a-zA-Z]/.test(c)) {
+            const upper = c===c.toUpperCase(), base = upper?65:97;
+            let shift = key.charCodeAt(ki%key.length)-65;
+            if (mode==='decode') shift=-shift;
+            result += String.fromCharCode(((c.charCodeAt(0)-base+shift%26+26)%26)+base);
+            ki++;
+        } else result += c;
+    }
+    return result;
+}
+const vigInput=document.getElementById('vig-input'), vigKey=document.getElementById('vig-key'),
+      vigMode=document.getElementById('vig-mode'), vigOutput=document.getElementById('vig-output');
+function updateVigenere() { if(vigOutput) vigOutput.value = vigenereLogic(vigInput.value,vigKey.value,vigMode.value); }
+if (vigInput) { vigInput.addEventListener('input',updateVigenere); vigKey.addEventListener('input',updateVigenere); vigMode.addEventListener('change',updateVigenere); }
