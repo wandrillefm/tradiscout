@@ -10,9 +10,9 @@
 </head>
 <body class="no-scrollbar">
 
-    <!-- LOADER AVEC ANIMATION ZOOM/FADE -->
+    <!-- LOADER -->
     <div id="loader">
-        <div id="typewriter" class="typewriter-text cursor-blink"></div>
+        <div id="typewriter" class="typewriter-text"></div>
     </div>
 
     <div id="main-content">
@@ -86,45 +86,29 @@
         <footer>
             <div class="footer-inner">
                 <!-- COLONNE 1 : RÉSEAUX -->
-                <div>
+                <div class="footer-col">
                     <span class="footer-col-title">Réseaux</span>
                     <ul class="footer-links">
-                        <li><a href="https://instagram.com/tradiscout" target="_blank">
-                            <span class="fl-label">Instagram</span><span class="fl-name">@tradiscout</span>
-                        </a></li>
-                        <li><a href="https://pinterest.com/tradiscout" target="_blank">
-                            <span class="fl-label">Pinterest</span><span class="fl-name">Fonds d'écrans</span>
-                        </a></li>
-                        <li><a href="https://facebook.com/tradiscout" target="_blank">
-                            <span class="fl-label">Facebook</span><span class="fl-name">Tradiscout</span>
-                        </a></li>
-                        <li><a href="https://tiktok.com/@tradiscout" target="_blank">
-                            <span class="fl-label">TikTok</span><span class="fl-name">@tradiscout</span>
-                        </a></li>
+                        <li><a href="https://instagram.com/tradiscout" target="_blank"><span class="fl-label">Instagram</span><span class="fl-name">@tradiscout</span></a></li>
+                        <li><a href="https://pinterest.com/tradiscout" target="_blank"><span class="fl-label">Pinterest</span><span class="fl-name">Fonds d'écrans</span></a></li>
+                        <li><a href="https://facebook.com/tradiscout" target="_blank"><span class="fl-label">Facebook</span><span class="fl-name">Tradiscout</span></a></li>
+                        <li><a href="https://tiktok.com/@tradiscout" target="_blank"><span class="fl-label">TikTok</span><span class="fl-name">@tradiscout</span></a></li>
                     </ul>
                 </div>
 
                 <!-- COLONNE 2 : RESSOURCES -->
-                <div>
+                <div class="footer-col">
                     <span class="footer-col-title">Ressources</span>
                     <ul class="footer-links">
-                        <li><a href="https://open.spotify.com/playlist/4dol5mUeugWo8hvZdXnvZ8" target="_blank">
-                            <span class="fl-label">Spotify</span><span class="fl-name">494 titres scoutes</span>
-                        </a></li>
-                        <li><a href="https://www.deezer.com/fr/playlist/13549630343" target="_blank">
-                            <span class="fl-label">Deezer</span><span class="fl-name">615 titres scoutes</span>
-                        </a></li>
-                        <li><a href="https://tradiscout.notion.site/Pr-parer-ses-activit-s-2ad8736dad9f80a3b259da56bb5a5615" target="_blank">
-                            <span class="fl-label">Notion</span><span class="fl-name">Ressources activités</span>
-                        </a></li>
-                        <li><a href="https://instagram.com/channel/AbYQB1ZxjbUUhCE5" target="_blank">
-                            <span class="fl-label">Groupe de prière</span><span class="fl-name">Tous les vendredis</span>
-                        </a></li>
+                        <li><a href="https://open.spotify.com/playlist/4dol5mUeugWo8hvZdXnvZ8" target="_blank"><span class="fl-label">Spotify</span><span class="fl-name">494 titres scoutes</span></a></li>
+                        <li><a href="https://www.deezer.com/fr/playlist/13549630343" target="_blank"><span class="fl-label">Deezer</span><span class="fl-name">615 titres scoutes</span></a></li>
+                        <li><a href="https://tradiscout.notion.site/Pr-parer-ses-activit-s-2ad8736dad9f80a3b259da56bb5a5615" target="_blank"><span class="fl-label">Notion</span><span class="fl-name">Activités</span></a></li>
+                        <li><a href="https://instagram.com/channel/AbYQB1ZxjbUUhCE5" target="_blank"><span class="fl-label">Prière</span><span class="fl-name">Tous les vendredis</span></a></li>
                     </ul>
                 </div>
 
                 <!-- COLONNE 3 : CONTACT -->
-                <div>
+                <div class="footer-col">
                     <span class="footer-col-title">Contact</span>
                     <p class="footer-contact-text">Une suggestion ou une photo ?</p>
                     <a href="mailto:tradiscout@gmail.com" class="footer-email">tradiscout@gmail.com</a>
@@ -139,21 +123,15 @@
 
         <nav class="tab-bar">
             <button class="tab-bar-btn active" id="tb-home" onclick="show('home')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
                 <span>accueil</span>
             </button>
             <button class="tab-bar-btn" id="tb-boutique" onclick="show('boutique')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 <span>boutique</span>
             </button>
             <button class="tab-bar-btn" id="tb-code" onclick="show('code')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
-                </svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                 <span>code</span>
             </button>
         </nav>
