@@ -10,13 +10,10 @@
         :root { --navy: #2C3776; --bg: #F8F2E7; --or: #c9a84c; --gris: #6b6b6b; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: var(--navy); font-family: 'DM Mono', monospace; min-height: 100vh; overflow-x: hidden; }
-        
         #main-content { opacity: 0; transition: opacity 1s ease; }
-
-        header { position: sticky; top: 0; z-index: 600; background: var(--bg); border-bottom: 1px solid rgba(44,55,118,0.12); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; }
-        .logo { font-family: 'Uncial Antiqua', serif; text-transform: uppercase; letter-spacing: 2px; font-size: 1.6rem; color: var(--navy); text-decoration: none; transition: 0.3s; }
-        .logo:hover { opacity: 0.6; }
         
+        header { position: sticky; top: 0; z-index: 600; background: var(--bg); border-bottom: 1px solid rgba(44,55,118,0.12); display: flex; align-items: center; justify-content: space-between; padding: 0 5%; height: 64px; }
+        .logo { font-family: 'Uncial Antiqua', serif; text-transform: uppercase; letter-spacing: 2px; font-size: 1.6rem; color: var(--navy); text-decoration: none; }
         .main-nav { display: flex; gap: 32px; align-items: center; }
         .main-nav a { text-decoration: none; color: var(--navy); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: lowercase; opacity: 0.4; transition: 0.2s; position: relative; padding-bottom: 3px; }
         .main-nav a:hover, .main-nav a.active { opacity: 1; }
@@ -25,7 +22,6 @@
         .content-wrap { max-width: 800px; margin: 0 auto; padding: 100px 5% 120px; text-align: center; min-height: 60vh; display: flex; align-items: center; justify-content: center; }
         .content-wrap p { font-size: 1rem; line-height: 1.8; font-style: italic; opacity: 0.8; }
 
-        /* FOOTER UNIFORMISÉ */
         footer { background: var(--navy); color: var(--bg); padding: 64px 5% 40px; }
         .footer-inner { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; }
         .footer-col-title { font-size: 0.52rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--or); margin-bottom: 25px; display: block; }
@@ -39,7 +35,6 @@
         .footer-bottom { max-width: 860px; margin: 48px auto 0; padding-top: 20px; border-top: 1px solid rgba(248,242,231,0.1); display: flex; justify-content: space-between; align-items: center; }
         .footer-bottom span { font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.35; }
 
-        /* NAVIGATION MOBILE BAS */
         .tab-bar { display: none; }
 
         @media (max-width: 768px) {
@@ -47,7 +42,7 @@
             .main-nav { display: none; }
             .footer-inner { grid-template-columns: 1fr; gap: 36px; }
             .tab-bar { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: var(--bg); border-top: 1px solid rgba(44,55,118,0.13); z-index: 1000; padding-bottom: env(safe-area-inset-bottom, 0px); }
-            .tab-bar-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 0; text-decoration: none; color: var(--navy); opacity: 0.3; transition: 0.2s; }
+            .tab-bar-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 0; text-decoration: none; color: var(--navy); opacity: 0.3; }
             .tab-bar-btn.active { opacity: 1; }
             .tab-bar-btn span { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: lowercase; }
             footer { padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
@@ -57,7 +52,7 @@
 <body>
     <div id="main-content">
         <header>
-            <a class="logo" href="https://tradiscout.com">TRADISCOUT</a>
+            <a class="logo" href="/">TRADISCOUT</a>
             <nav class="main-nav">
                 <a href="/" class="active">accueil</a>
                 <a href="https://shop.tradiscout.com">boutique</a>
