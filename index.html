@@ -22,6 +22,7 @@
         .content-wrap { max-width: 800px; margin: 0 auto; padding: 100px 5% 120px; text-align: center; min-height: 60vh; display: flex; align-items: center; justify-content: center; }
         .content-wrap p { font-size: 1rem; line-height: 1.8; font-style: italic; opacity: 0.8; }
 
+        /* FOOTER UNIFORMISÉ */
         footer { background: var(--navy); color: var(--bg); padding: 64px 5% 40px; }
         .footer-inner { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; }
         .footer-col-title { font-size: 0.52rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--or); margin-bottom: 25px; display: block; }
@@ -36,13 +37,12 @@
         .footer-bottom span { font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.35; }
 
         .tab-bar { display: none; }
-
         @media (max-width: 768px) {
             header { justify-content: center; }
             .main-nav { display: none; }
             .footer-inner { grid-template-columns: 1fr; gap: 36px; }
             .tab-bar { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: var(--bg); border-top: 1px solid rgba(44,55,118,0.13); z-index: 1000; padding-bottom: env(safe-area-inset-bottom, 0px); }
-            .tab-bar-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 0; text-decoration: none; color: var(--navy); opacity: 0.3; }
+            .tab-bar-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 0; text-decoration: none; color: var(--navy); opacity: 0.3; transition: 0.2s; }
             .tab-bar-btn.active { opacity: 1; }
             .tab-bar-btn span { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: lowercase; }
             footer { padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
@@ -52,18 +52,14 @@
 <body>
     <div id="main-content">
         <header>
-            <a class="logo" href="/">TRADISCOUT</a>
+            <a class="logo" href="https://tradiscout.com">TRADISCOUT</a>
             <nav class="main-nav">
                 <a href="/" class="active">accueil</a>
                 <a href="https://shop.tradiscout.com">boutique</a>
                 <a href="https://code.tradiscout.com">code</a>
             </nav>
         </header>
-
-        <div class="content-wrap">
-            <p>"Le scoutisme ne s'arrête pas au camp"</p>
-        </div>
-
+        <div class="content-wrap"><p>"Le scoutisme ne s'arrête pas au camp"</p></div>
         <footer>
             <div class="footer-inner">
                 <div>
@@ -90,12 +86,8 @@
                     <a href="mailto:tradiscout@gmail.com" class="footer-email">tradiscout@gmail.com</a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <span>© 2026 Tradiscout</span>
-                <span>Verso l'Alto!</span>
-            </div>
+            <div class="footer-bottom"><span>© 2026 Tradiscout</span><span>Verso l'Alto!</span></div>
         </footer>
-
         <nav class="tab-bar">
             <a href="/" class="tab-bar-btn active"><span>accueil</span></a>
             <a href="https://shop.tradiscout.com" class="tab-bar-btn"><span>boutique</span></a>
