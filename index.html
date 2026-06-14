@@ -57,6 +57,106 @@
             .tab-bar-btn span { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: lowercase; }
             footer { padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
         }
+
+        #shop-content { display: none; flex: 1; }
+
+        /* ── FEATURE CARDS ── */
+        .features-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 72px 5% 48px;
+            border-top: 1px solid rgba(44,55,118,0.1);
+        }
+        .features-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 36px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .feature-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(44,55,118,0.1);
+            transition: box-shadow 0.2s;
+        }
+        .feature-card:hover { box-shadow: 0 0 0 2px var(--navy) inset; }
+        .feature-card-img-wrap {
+            position: absolute;
+            inset: 0;
+        }
+        .feature-card-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+            transition: transform 0.5s, filter 0.3s;
+        }
+        .feature-card:hover .feature-card-img-wrap img {
+            transform: scale(1.04);
+            filter: brightness(0.8);
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(20,25,60,0.5) 0%, rgba(20,25,60,0.7) 100%);
+            z-index: 1;
+            transition: opacity 0.3s;
+        }
+        .feature-card:hover::before { opacity: 0.85; }
+        .feature-card-body {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 3rem 4rem;
+            display: flex; flex-direction: column; gap: 10px;
+            align-items: center;
+        }
+        .feature-card-eyebrow {
+            font-size: 0.48rem; letter-spacing: 0.22em;
+            text-transform: uppercase; color: var(--or);
+        }
+        .feature-card-title {
+            font-family: 'Uncial Antiqua', serif;
+            font-size: 1.5rem; color: white;
+        }
+        .feature-card-text {
+            font-size: 0.62rem; color: rgba(248,242,231,0.75);
+            line-height: 1.85; max-width: 520px;
+        }
+        @media (max-width: 768px) {
+            .features-section { padding: 48px 5% 32px; }
+            .feature-card { min-height: 220px; }
+            .feature-card-body { padding: 2rem 1.5rem; }
+            .feature-card-title { font-size: 1.2rem; }
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 88vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 80px 5% 60px;
+            position: relative; overflow: hidden;
+            background: url('images/backround.png') center center / cover no-repeat;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to bottom,rgba(44,55,118,.55) 0%,rgba(20,25,60,.7) 60%,rgba(44,55,118,.85) 100%);
+            pointer-events: none;
+        }
+        .hero-eyebrow { font-size:.5rem;letter-spacing:.28em;text-transform:uppercase;color:var(--or);margin-bottom:28px;opacity:0;animation:fadeUp .7s ease .1s forwards;position:relative; }
+        .hero-title { font-family:'Uncial Antiqua',serif;font-size:clamp(1rem,3vw,2rem);line-height:1.05;color:white;margin-bottom:28px;opacity:0;animation:fadeUp .7s ease .25s forwards;position:relative; }
+        .hero-sub { font-size:.72rem;color:rgba(248,242,231,.8);line-height:1.9;max-width:460px;opacity:0;animation:fadeUp .7s ease .4s forwards;margin-bottom:48px;position:relative; }
+        .hero-cta { display:inline-block;padding:14px 40px;border:1px solid white;color:white;text-decoration:none;font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;transition:.2s;opacity:0;animation:fadeUp .7s ease .55s forwards;position:relative; }
+        .hero-cta:hover { background:white;color:var(--navy); }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
     </style>
 </head>
 <body>
@@ -69,9 +169,64 @@
                 <a href="https://code.tradiscout.com">code</a>
             </nav>
         </header>
+<!-- SHOP CONTENT -->
+    <div id="shop-content">
+
         <div class="hero">
-            <p class="hero-quote">"Le scoutisme ne s'arrête pas au camp"</p>
+            <div class="hero-eyebrow">Conçu en Savoie - Fabriqué dans les Pyrénées</div>
+            <div class="hero-title">Enraciné dans la Foi et la Tradition</div>
+            <div class="hero-sub">Est. 2025</div>
+            <!-- Ligne modifiée ci-dessous -->
+            <a class="hero-cta" href="https://shop.tradiscout.com">Voir la boutique</a>
         </div>
+
+
+<!-- FEATURE CARDS -->
+<div class="features-section">
+    <div class="features-header">
+        <div class="section-header-title">L'esprit Tradiscout</div>
+        <div class="section-header-sub">Vers le haut</div>
+    </div>
+    <div class="features-grid">
+
+        <div class="feature-card">
+            <div class="feature-card-img-wrap">
+                <img src="Capture d'écran 2026-06-08 181254.png" alt="Qualité"
+                     onerror="this.style.display='none'" />
+            </div>
+            <div class="feature-card-body">
+                <div class="feature-card-eyebrow">Artisanat</div>
+                <div class="feature-card-title">Fabriqué dans les Pyrénées</div>
+                <div class="feature-card-text">Chaque pièce sort d'un atelier pyrénéen, avec des matières sélectionnées pour leur tenue et leur confort. Rien de moins.</div>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-card-img-wrap">
+                <img src="guides.jpg" alt="Mission"
+                     onerror="this.style.display='none'" />
+            </div>
+            <div class="feature-card-body">
+                <div class="feature-card-eyebrow">Mission</div>
+                <div class="feature-card-title">Verso l'Alto</div>
+                <div class="feature-card-text">Porter l'identité catholique et scoute avec fierté. Tradiscout, c'est une communauté qui vit sa foi sur le terrain et au-delà.</div>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-card-img-wrap">
+                <img src="2015-05-08-JN-photos-JN-Becker-126-e1589040070895.jpg" alt="Communauté"
+                     onerror="this.style.display='none'" />
+            </div>
+            <div class="feature-card-body">
+                <div class="feature-card-eyebrow">Communauté</div>
+                <div class="feature-card-title">Une famille scoute</div>
+                <div class="feature-card-text">Chaque achat soutient les projets de la communauté. Rejoins les vaillants qui portent les couleurs Tradiscout.</div>
+            </div>
+        </div>
+
+    </div>
+</div>
         <footer>
             <div class="footer-inner">
                 <div>
